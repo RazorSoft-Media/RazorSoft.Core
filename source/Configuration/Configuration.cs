@@ -1,19 +1,22 @@
-﻿//	* ********************************************************************
-//	*  © 2020 RazorSoft Media, DBA                                       *
-//	*         Lone Star Logistics & Transport, LLC. All Rights Reserved  *
-//	*         David Boarman                                              *
-//	* ********************************************************************
+﻿//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Reflection;
 using System.Collections.Generic;
 
 
 namespace RazorSoft.Core.Configuration {
+
+    /// <summary>
+    /// Core configuration abstraction
+    /// </summary>
     public abstract class Configuration : IConfiguration {
         private static readonly SettingsContainer SETTINGS = new SettingsContainer();
 
@@ -21,17 +24,40 @@ namespace RazorSoft.Core.Configuration {
         private static readonly string FILE_NAME = "settings";
         private static readonly string ROOT = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-        /// <summary>
-        /// Assumes Environment.CurrentDirectory
-        /// </summary>
-        public string FileExt => $"{FILE_EXT}";
-        public string FileName { get; } = $"{FILE_NAME}.{FILE_EXT}";
-        public string FilePath { get; } = ROOT;
-        public IReadOnlyCollection<string> Keys => SETTINGS.Keys;
-        public byte[] this[string key] => SETTINGS[key];
 
         private string fullFileName => Path.Combine(FilePath, FileName);
 
+
+        /// <summary>
+        /// Get the key's value in the default format (byte[])
+        /// </summary>
+        /// <param name="key">specified key name</param>
+        /// <returns>byte[]</returns>
+        public byte[] this[string key] => SETTINGS[key];
+        /// <summary>
+        /// Returns a read-only collection of configuration keys
+        /// </summary>
+        public IReadOnlyCollection<string> Keys => SETTINGS.Keys;
+        /// <summary>
+        /// Assumes Environment.CurrentDirectory
+        /// Get the default configuration file extension
+        /// </summary>
+        public string FileExt => $"{FILE_EXT}";
+        /// <summary>
+        /// Get the configuration file name
+        /// </summary>
+        public string FileName { get; } = $"{FILE_NAME}.{FILE_EXT}";
+        /// <summary>
+        /// Get the configuration file path
+        /// </summary>
+        public string FilePath { get; } = ROOT;
+
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="path">optional: path if different than default</param>
+        /// <param name="file">optional: file name if different than default</param>
         protected Configuration(string path = "", string file = "") {
             if (!string.IsNullOrEmpty(file)) {
                 FileName = $"{file}.{FILE_EXT}";
@@ -50,18 +76,43 @@ namespace RazorSoft.Core.Configuration {
             }
         }
 
+
+        /// <summary>
+        /// Add a new configuration key by name with the specified value
+        /// </summary>
+        /// <typeparam name="TValue">value type</typeparam>
+        /// <param name="name">key name</param>
+        /// <param name="value">value assigned to the key</param>
         void IConfiguration.Add<TValue>(string name, TValue value) {
             SETTINGS.Add(name, value);
         }
+        /// <summary>
+        /// Clears the entire configuration context of all settings
+        /// </summary>
         public void Clear() {
             SETTINGS.Clear();
         }
+        /// <summary>
+        /// Gets the value assigned to the named key
+        /// </summary>
+        /// <typeparam name="TValue">value type</typeparam>
+        /// <param name="name">key name</param>
+        /// <returns>TValue</returns>
         TValue IConfiguration.Get<TValue>(string name) {
             return SETTINGS.GetValue<TValue>(name);
         }
+        /// <summary>
+        /// Sets the value assigned to the named key
+        /// </summary>
+        /// <typeparam name="TValue">value type</typeparam>
+        /// <param name="name">key name</param>
+        /// <param name="value">value to be assigned</param>
         void IConfiguration.Set<TValue>(string name, TValue value) {
             SETTINGS.Set(name, value);
         }
+        /// <summary>
+        /// Load configuration file
+        /// </summary>
         public void Load() {
             var items = ReadJson(fullFileName);
 
@@ -74,6 +125,10 @@ namespace RazorSoft.Core.Configuration {
                 SETTINGS.Add(setting);
             }
         }
+        /// <summary>
+        /// Save the configuration file
+        /// </summary>
+        /// <returns></returns>
         public bool Save() {
             using (var stream = File.OpenWrite(fullFileName)) {
                 //  truncate file

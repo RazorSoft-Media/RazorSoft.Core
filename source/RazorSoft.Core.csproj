@@ -16,12 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RazorSoft.Core.PostBuild\**" />
-    <EmbeddedResource Remove="RazorSoft.Core.PostBuild\**" />
-    <None Remove="RazorSoft.Core.PostBuild\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Infrastructure\" />
   </ItemGroup>
 

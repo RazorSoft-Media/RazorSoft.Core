@@ -1,8 +1,8 @@
-/* ***********************************************
- *  © 2020 RazorSoft Media, DBA
- *         Lone Star Logistics & Transport, LLC. All Rights Reserved
- *         David Boarman
- * ***********************************************/
+//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
@@ -27,6 +27,8 @@ namespace UnitTest.RazorSoft.Core {
         private static IConfiguration configuration;
         private static Settings settings;
 
+
+        #region test harness configuration
         [ClassInitialize]
         public static void SetupTests(TestContext context) {
             settings = (Settings)(configuration = new Settings(LOCAL, CONFIG));
@@ -40,6 +42,8 @@ namespace UnitTest.RazorSoft.Core {
         public void CleanupTest() {
             configuration.Clear();
         }
+        #endregion
+
 
         [TestMethod]
         public void DefaultSettings() {
@@ -93,6 +97,7 @@ namespace UnitTest.RazorSoft.Core {
         }
 
         private class Settings : Configuration {
+
             public Settings(string path = "", string file = "") : base(path, file) {
             }
         }
