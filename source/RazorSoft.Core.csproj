@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Copyright>2020</Copyright>
+    <Company>RazorSoft Media, DBA</Company>
+    <Authors>David Boarman</Authors>
+    <Configuration>Debug</Configuration>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0.0</InformationalVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyTitle>RazorSoft.Core</AssemblyTitle>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId />
+    <Version>1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="RazorSoft.Core.PostBuild\**" />
+    <EmbeddedResource Remove="RazorSoft.Core.PostBuild\**" />
+    <None Remove="RazorSoft.Core.PostBuild\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+</Project>

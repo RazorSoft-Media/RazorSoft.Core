@@ -1,0 +1,8 @@
+C:\LSLT Software Development\RazorSoft.Core\source\bin\Debug\netcoreapp3.1\RazorSoft.Core.deps.json
+C:\LSLT Software Development\RazorSoft.Core\source\bin\Debug\netcoreapp3.1\RazorSoft.Core.dll
+C:\LSLT Software Development\RazorSoft.Core\source\bin\Debug\netcoreapp3.1\RazorSoft.Core.pdb
+C:\LSLT Software Development\RazorSoft.Core\source\obj\Debug\netcoreapp3.1\RazorSoft.Core.AssemblyInfoInputs.cache
+C:\LSLT Software Development\RazorSoft.Core\source\obj\Debug\netcoreapp3.1\RazorSoft.Core.AssemblyInfo.cs
+C:\LSLT Software Development\RazorSoft.Core\source\obj\Debug\netcoreapp3.1\RazorSoft.Core.csproj.CoreCompileInputs.cache
+C:\LSLT Software Development\RazorSoft.Core\source\obj\Debug\netcoreapp3.1\RazorSoft.Core.dll
+C:\LSLT Software Development\RazorSoft.Core\source\obj\Debug\netcoreapp3.1\RazorSoft.Core.pdb
