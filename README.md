@@ -12,4 +12,4 @@ ________________________________________________________________________________
        Lone Star Logistics & Transport, LLC. All Rights Reserved  
 
 [1]: README.md  
-[2]: .wiki/.documentation/configuration.md  
+[2]: wiki/.documentation/configuration.md  
