@@ -1,10 +1,12 @@
 # RazorSoft.Core  
 ## Configuration
 ____________________________________________________________________________________________________  
-[Home][1]  
+[Home][1] | [Whiteboard][2]
 
-We revive a settings & configuration staple with some modifications. These functions 
-provide us with very modular configuration - that is, every library can have its own settings file. 
+We revive a settings & configuration staple with some modifications. These functions provide us with 
+a manageable settings library - easy to use and maintain. New features should *never* break compatibility 
+with older settings files. This initial version of the library is considered the basic, default behavior.
+
 By default, setting files will be save with the `.config` extension. The file is written in **JSON**.  
 
 One difference is that the value is serialized. The library needs to have some updates that allows 
@@ -19,12 +21,13 @@ Sample settings from unit testing:
 
 ```
 
-May be useful to include other encoding or even encryption.
-
-See the unit tests on how to use and implement.  
-  
+Ref:  
+    + [Whiteboard][2]: feature suggestions  
+    + [Unit tests][3]: in-depth use and implementation  
 ____________________________________________________________________________________________________   
 © 2020 RazorSoft Media, DBA  
        Lone Star Logistics & Transport, LLC. All Rights Reserved  
 
 [1]: ../../README.md
+[2]: ../whiteboard.md
+[3]: ../testing/Test.RazorSoft.Core/ConfigurationTests.cs
