@@ -9,7 +9,7 @@ from this page.
 
 * **Configuration**:
    - Settings Sections
-   - Section Attributes: Readable, Sericalized, Encoded, Encrypted
+   - Section Attributes: Readable, Serialized, Encoded, Encrypted
    - Settings Utility: to create & edit settings files
    
 * **Messaging**:  
