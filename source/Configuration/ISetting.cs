@@ -1,11 +1,12 @@
-﻿//	* ********************************************************************
-//	*  © 2020 RazorSoft Media, DBA                                       *
-//	*         Lone Star Logistics & Transport, LLC. All Rights Reserved  *
-//	*         David Boarman                                              *
-//	* ********************************************************************
+﻿//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 namespace RazorSoft.Core.Configuration {
+
     public interface ISetting {
 
         string Name { get; }
