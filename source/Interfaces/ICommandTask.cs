@@ -10,7 +10,10 @@ using System;
 
 namespace RazorSoft.Core {
 
-    public interface ITransaction {
+    public interface ICommandTask {
+        /// <summary>
+        /// Command task type
+        /// </summary>
 		Type Type { get; }
     }
 }

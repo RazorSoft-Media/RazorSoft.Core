@@ -1,13 +1,11 @@
-/* ***********************************************
- *  © 2020 RazorSoft Media, DBA
- *         Lone Star Logistics & Transport, LLC. All Rights Reserved
- *         David Boarman
- * ***********************************************/
+//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
-using System.Linq;
-using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 //
 using RazorSoft.Core;
@@ -23,22 +21,22 @@ namespace UnitTest.RazorSoft.Core {
 
         [TestMethod]
         public void CreateExecuteCommand() {
-            commandRouter.AddCommandTarget<ITransactionClass>(new TransactionClass());
+            commandRouter.AddCommandTarget<ICommandInterface>(new CommandAPI());
 
-            var result = new AddCommand().Execute((TransactionClass r) => r.Add(2, 4));
+            var result = new AddCommand().Execute((CommandAPI r) => r.Add(2, 4));
 
             Assert.AreEqual(6, result);
         }
 
-        public class AddCommand : ITransaction {
-            public Type Type => typeof(ITransactionClass);
+        public class AddCommand : ICommandTask {
+            public Type Type => typeof(ICommandInterface);
         }
 
-        public interface ITransactionClass {
+        public interface ICommandInterface {
             int Add(int x, int y);
         }
 
-        private class TransactionClass : ITransactionClass {
+        private class CommandAPI : ICommandInterface {
 
             public int Add(int x, int y) {
                 return x + y;

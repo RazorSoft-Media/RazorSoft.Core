@@ -10,21 +10,21 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-namespace RazorSoft.Core.Events {
+namespace RazorSoft.Core.Messaging {
     public delegate void SendMessage<TEventMessage>(TEventMessage eventMessage);
 
     /// <summary>
-    /// EventAggregator: singleton
+    /// EventPublisher: singleton
     /// Publishes events to subscribers.
     /// </summary>
-    public class EventAggregator : SingletonBase<EventAggregator> {
+    public class EventPublisher : SingletonBase<EventPublisher> {
         private readonly Dictionary<Type, IList<Delegate>> subsDistribution;
 
 
         /// <summary>
         /// Singleton instance
         /// </summary>
-        public static EventAggregator Default => Singleton;
+        public static EventPublisher Default => Singleton;
 
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace RazorSoft.Core.Events {
         /// <summary>
         /// ctor
         /// </summary>
-        private EventAggregator() {
+        private EventPublisher() {
             subsDistribution = new Dictionary<Type, IList<Delegate>>();
         }
 

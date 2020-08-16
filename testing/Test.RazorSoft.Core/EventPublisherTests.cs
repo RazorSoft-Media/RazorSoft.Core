@@ -11,15 +11,15 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 //
 using RazorSoft.Core;
-using RazorSoft.Core.Events;
+using RazorSoft.Core.Messaging;
 using RazorSoft.Core.Extensions;
 
 
 namespace UnitTest.RazorSoft.Core {
 
     [TestClass]
-    public class AggregatorTests {
-        private static readonly EventAggregator eventAggregator = EventAggregator.Default;
+    public class EventPublisherTests {
+        private static readonly EventPublisher eventPublisher = EventPublisher.Default;
 
         private bool hasEvent;
         private int loadId;
@@ -39,11 +39,11 @@ namespace UnitTest.RazorSoft.Core {
             var type = typeof(LoadEventMessage);
             var typeName = type.Name;
 
-            eventAggregator.CreatePublication<LoadEventMessage>();
+            eventPublisher.CreatePublication<LoadEventMessage>();
 
-            Assert.IsTrue(eventAggregator.Subscriptions.Any(s => s == typeName));
-            Assert.IsNotNull(eventAggregator.Distribution[type]);
-            Assert.AreEqual(0, eventAggregator.Distribution[type].Count);
+            Assert.IsTrue(eventPublisher.Subscriptions.Any(s => s == typeName));
+            Assert.IsNotNull(eventPublisher.Distribution[type]);
+            Assert.AreEqual(0, eventPublisher.Distribution[type].Count);
         }
 
         [TestMethod]
@@ -51,12 +51,12 @@ namespace UnitTest.RazorSoft.Core {
             var type = typeof(LoadEventMessage);
             var typeName = type.Name;
 
-            eventAggregator.CreatePublication<LoadEventMessage>();
+            eventPublisher.CreatePublication<LoadEventMessage>();
 
             var expHandler = new SendMessage<LoadEventMessage>(ProcessLoadEvent);
-            eventAggregator.Subscribe(expHandler);
+            eventPublisher.Subscribe(expHandler);
 
-            var actHandler = eventAggregator.Distribution[type]
+            var actHandler = eventPublisher.Distribution[type]
                 .FirstOrDefault(h => ((SendMessage<LoadEventMessage>)h).Equals(expHandler));
 
             Assert.IsNotNull(actHandler);
@@ -67,10 +67,10 @@ namespace UnitTest.RazorSoft.Core {
             var type = typeof(LoadEventMessage);
             var typeName = type.Name;
 
-            eventAggregator.CreatePublication<LoadEventMessage>();
+            eventPublisher.CreatePublication<LoadEventMessage>();
 
             var expHandler = new SendMessage<LoadEventMessage>(ProcessLoadEvent);
-            eventAggregator.Subscribe(expHandler);
+            eventPublisher.Subscribe(expHandler);
 
             var expLoadInfo = new LoadEventMessage(1, "NEW");
             expLoadInfo.Publish();
@@ -83,7 +83,7 @@ namespace UnitTest.RazorSoft.Core {
             var hasNewLoadEvent = false;
             expLoadInfo = new LoadEventMessage(2, "ASSIGNED");
 
-            eventAggregator.Subscribe((LoadEventMessage m) => {
+            eventPublisher.Subscribe((LoadEventMessage m) => {
                 hasNewLoadEvent = true;
                 loadId = m.LoadId;
                 action = m.Action;
@@ -103,8 +103,8 @@ namespace UnitTest.RazorSoft.Core {
             var expLoadId = 5;
             var expLoadAction = "DROPPED";
 
-            eventAggregator.CreatePublication<ILoadEventMessage>();
-            eventAggregator.Subscribe<ILoadEventMessage>(ProcessLoadEvent);
+            eventPublisher.CreatePublication<ILoadEventMessage>();
+            eventPublisher.Subscribe<ILoadEventMessage>(ProcessLoadEvent);
 
             ((ILoadEventMessage)new LoadEventMessage(expLoadId, expLoadAction)).Publish();
 

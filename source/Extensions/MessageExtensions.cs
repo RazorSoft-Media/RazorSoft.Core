@@ -15,7 +15,7 @@ namespace RazorSoft.Core.Extensions {
 
     public static class MessageExtensions {
 		public static void Publish<TEventMessage>(this TEventMessage eventMessage) where TEventMessage : IEventMessage {
-            EventAggregator.Default.Publish(eventMessage);
+            EventPublisher.Default.Publish(eventMessage);
         }
 
         public static void Publish<TEventMessage>(this TEventMessage eventMessage, params Action<TEventMessage>[] actions) where TEventMessage : IEventMessage {
@@ -23,7 +23,7 @@ namespace RazorSoft.Core.Extensions {
                 act(eventMessage);
             }
 
-            EventAggregator.Default.Publish(eventMessage);
+            EventPublisher.Default.Publish(eventMessage);
         }
 		public static void Publish<TEventMessage>(this Func<TEventMessage> messageFunc) where TEventMessage : IEventMessage {
             messageFunc().Publish();
@@ -39,7 +39,7 @@ namespace RazorSoft.Core.Extensions {
             eventMessage.Publish();
         }
 
-        public static TResult Execute<TTarget, TResult>(this ITransaction transaction, Func<TTarget, TResult> func) {
+        public static TResult Execute<TTarget, TResult>(this ICommandTask transaction, Func<TTarget, TResult> func) {
             return CommandRouter.Default.Execute(transaction, func);
         }
 

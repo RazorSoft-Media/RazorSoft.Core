@@ -1,8 +1,8 @@
-//	* ********************************************************************
-//	*  © 2020 RazorSoft Media, DBA                                       *
-//	*         Lone Star Logistics & Transport, LLC. All Rights Reserved  *
-//	*         David Boarman                                              *
-//	* ********************************************************************
+//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
@@ -37,7 +37,7 @@ namespace RazorSoft.Core.Messaging {
             }
         }
 
-        internal TResult Execute<TTarget, TResult>(ITransaction transaction, Func<TTarget, TResult> func) {
+        internal TResult Execute<TTarget, TResult>(ICommandTask transaction, Func<TTarget, TResult> func) {
             var result = default(TResult);
 
             if(commandTargets.TryGetValue(transaction.Type, out object target)) {

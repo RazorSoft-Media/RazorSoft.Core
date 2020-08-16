@@ -5,6 +5,7 @@ ________________________________________________________________________________
 
 Includes the following:  
 - [Configuration][3]: classes and collection of functions that provide application/library settings.
+- [Messaging][4]: `EventAggregator` & `CommandRouter` and respective messaging mechanisms.
 
 
 ____________________________________________________________________________________________________   
@@ -14,3 +15,4 @@ ________________________________________________________________________________
 [1]: README.md  
 [2]: wiki/whiteboard.md
 [3]: wiki/.documentation/configuration.md  
+[4]: wiki/.documentation/messaging.md

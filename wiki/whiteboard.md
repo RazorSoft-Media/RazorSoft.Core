@@ -8,6 +8,10 @@ ________________________________________________________________________________
    - Section Attributes: Readable, Sericalized, Encoded, Encrypted
    - Settings Utility: to create & edit settings files
    
+* **Messaging**:  
+   - EventPublisher
+     - Asynchronous publications: defaults event publishing to asynchronous distribution
+	 - PublishAsync method: publishes specifically to asynchronous distribution
    
 
 
