@@ -66,20 +66,5 @@ namespace UnitTest.RazorSoft.Core {
 
             testPath = actFullPath;
         }
-
-        [TestMethod]
-        public void GenerateRandomString_1() {
-            var numeric = new Random().GenerateNumberString(10);
-            var letter = new Random().GenerateLetterString(10);
-            var upper = new Random().GenerateLetterString(10, LetterCase.Upper);
-            var lower = new Random().GenerateLetterString(10, LetterCase.Lower);
-            var alpha = new Random().GenerateAlphaNumericString(10, LetterCase.Mixed);
-
-            Debug.WriteLine(numeric + " - Numeric");
-            Debug.WriteLine(letter + " - Alpha");
-            Debug.WriteLine(upper + " - UpperAlpha");
-            Debug.WriteLine(lower + " - LowerAlpha");
-            Debug.WriteLine(alpha + " - AlphaNumeric");
-        }
     }
 }

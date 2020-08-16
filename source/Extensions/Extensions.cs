@@ -1,8 +1,8 @@
-﻿//	* ********************************************************************
-//	*  © 2020 RazorSoft Media, DBA                                       *
-//	*         Lone Star Logistics & Transport, LLC. All Rights Reserved  *
-//	*         David Boarman                                              *
-//	* ********************************************************************
+﻿//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
@@ -20,7 +20,7 @@ namespace RazorSoft.Core.Extensions {
         /// minimum data value
         /// </summary>
         /// <param name="dateTime">supplied DateTime value</param>
-        /// <returns>TRUE if given DateTime is greater than the DateTime.MinValue constant.</returns>
+        /// <returns>(bool) TRUE if given DateTime is greater than the DateTime.MinValue constant.</returns>
         public static bool IsValid(this DateTime dateTime) {
             return dateTime > DateTime.MinValue;
         }
@@ -30,7 +30,7 @@ namespace RazorSoft.Core.Extensions {
         /// <param name="root">The root directory</param>
         /// <param name="path">The first sub-directory</param>
         /// <param name="paths">Additional sub-directories</param>
-        /// <returns>DirectoryInfo object with complete path structure</returns>
+        /// <returns>(DirectoryInfo) directory object with complete path structure</returns>
         public static DirectoryInfo CombinePaths(this DirectoryInfo root, string path, params string[] paths) {
             var subDirs = new string[paths.Length + 2];
             subDirs[0] = root.FullName;
@@ -43,7 +43,7 @@ namespace RazorSoft.Core.Extensions {
         /// Get the size of a file from the specified file info object.
         /// </summary>
         /// <param name="fileInfo">The given file info object.</param>
-        /// <returns>Size of the file; -1 if the file is not found.</returns>
+        /// <returns>(long) Size of the file; -1 if the file is not found.</returns>
         public static long Size(this FileInfo fileInfo) {
             var size = -1L;
 
@@ -60,7 +60,7 @@ namespace RazorSoft.Core.Extensions {
         /// Creates entire path structure from given DirectoryInfo
         /// </summary>
         /// <param name="directory">supplied DirectoryInfo</param>
-        /// <returns>Full string path structure if success; otherwise, empty string</returns>
+        /// <returns>(string) Full string path structure if success; otherwise, empty string</returns>
         public static string CreatePath(this DirectoryInfo directory) {
             var stack = new Stack<string>();
             var parent = directory;
@@ -90,7 +90,7 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: MMM-dd-yyyy HH:mm:ss
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
-        /// <returns>"MMM-dd-yyyy HH:mm:ss"</returns>
+        /// <returns>(string) "MMM-dd-yyyy HH:mm:ss"</returns>
         public static string AsStandard(this DateTime time) {
             return $"{time:MMM-dd-yyyy HH:mm:ss}";
         }
@@ -98,7 +98,7 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: yyyy MMMM dd
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
-        /// <returns>"yyyy MMMM dd"</returns>
+        /// <returns>(string) "yyyy MMMM dd"</returns>
         public static string AsStandardDate(this DateTime time) {
             return $"{time:yyyy MMMM dd}";
         }
@@ -106,7 +106,8 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: MMyyddHHmmss
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
-        /// <returns>"MMyyddHHmmss"</returns>
+        /// <param name="ext">file name extension</param>
+        /// <returns>(string) "MMyyddHHmmss.{ext}"</returns>
         public static string AsFileName(this DateTime time, string ext) {
             return $"{time:MMyyddHHmmss}.{ext}";
         }
@@ -114,7 +115,7 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: Log Header: yyyy, MMMM dd
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
-        /// <returns>"Log Header: yyyy, MMMM dd"</returns>
+        /// <returns>(string) "Log Header: yyyy, MMMM dd"</returns>
         public static string AsLogHeader(this DateTime time) {
             return time.AsLogEntry($"Log Header: {time.AsStandardDate()}");
         }
@@ -122,7 +123,7 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: HH:mm:ssss:    {entry}
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
-        /// <returns>"HH:mm:ssss:    {entry}"</returns>
+        /// <returns>(string) "HH:mm:ssss:    {entry}"</returns>
         public static string AsLogEntry(this DateTime time, string entry) {
             return $"{time:HH:mm:sss}:    {entry}";
         }
@@ -131,7 +132,7 @@ namespace RazorSoft.Core.Extensions {
         /// </summary>
         /// <typeparam name="TValue">The specified type parameter</typeparam>
         /// <param name="value">target value</param>
-        /// <returns>byte[] buffer</returns>
+        /// <returns>(byte[]) buffer</returns>
         public static byte[] Encode<TValue>(this TValue value) {
             var typeCode = Type.GetTypeCode(typeof(TValue));
             var v = (object)value;
@@ -200,7 +201,7 @@ namespace RazorSoft.Core.Extensions {
         /// </summary>
         /// <typeparam name="TValue">The specified type parameter</typeparam>
         /// <param name="buffer">target byte[] buffer</param>
-        /// <returns>True value</returns>
+        /// <returns>(TValue) value</returns>
         public static TValue DecodeAs<TValue>(this byte[] buffer) {
             var typeCode = Type.GetTypeCode(typeof(TValue));
             var value = default(object);

@@ -1,8 +1,8 @@
-//	* ********************************************************************
-//	*  © 2020 RazorSoft Media, DBA                                       *
-//	*         Lone Star Logistics & Transport, LLC. All Rights Reserved  *
-//	*         David Boarman                                              *
-//	* ********************************************************************
+//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
@@ -10,7 +10,8 @@ using System;
 
 namespace RazorSoft.Core {
 
-    public interface IEventMessage {
-		
-    }
+    /// <summary>
+    /// Placeholder interface
+    /// </summary>
+    public interface IEventMessage { }
 }

@@ -97,7 +97,7 @@ namespace UnitTest.RazorSoft.Core {
                 Log(entryResult(assert()));
             }
 
-            protected override byte[] GetBuffer(string entry) {
+            protected override byte[] Encode(string entry) {
                 if (string.IsNullOrEmpty(entry)) {
                     return Encoder.GetBytes(Environment.NewLine);
                 }
@@ -132,7 +132,7 @@ namespace UnitTest.RazorSoft.Core {
             }
 
             public override void Write(string entry) {
-                NotifyWrite(GetBuffer(entry));
+                NotifyWrite(Encode(entry));
             }
 
             protected override void NotifyWrite(byte[] buffer) {
