@@ -21,12 +21,13 @@ Sample settings from unit testing:
 
 ```
 
-Ref:
-    + [Whiteboard][2] for feature suggestions
-    * Unit tests for in-depth use and implementation  
+Ref:  
+    + [Whiteboard][2]: feature suggestions  
+    + [Unit tests][3]: in-depth use and implementation  
 ____________________________________________________________________________________________________   
 © 2020 RazorSoft Media, DBA  
        Lone Star Logistics & Transport, LLC. All Rights Reserved  
 
 [1]: ../../README.md
 [2]: ../whiteboard.md
+[3]: ../testing/Test.RazorSoft.Core/ConfigurationTests.cs
