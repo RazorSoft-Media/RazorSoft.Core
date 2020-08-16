@@ -1,7 +1,7 @@
 # RazorSoft.Core  
 ## Configuration
 ____________________________________________________________________________________________________  
-[Home][1]  
+[Home][1] | [Whiteboard][2]
 
 We revive a settings & configuration staple with some modifications. These functions 
 provide us with very modular configuration - that is, every library can have its own settings file. 
@@ -28,3 +28,4 @@ ________________________________________________________________________________
        Lone Star Logistics & Transport, LLC. All Rights Reserved  
 
 [1]: ../../README.md
+[2]: ../whiteboard.md
