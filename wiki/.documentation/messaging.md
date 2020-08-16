@@ -6,7 +6,10 @@ ________________________________________________________________________________
 ### EventPublisher  
 The `EventPublisher` is provides a mechanism by which events (messages) can be published by any 
 object (Publisher) with a view of the `EventMessage`. Any object with reference to the `EventMessage` 
-has the ability to publish - that is, *distribute* - the message to all subscribers.
+has the ability to publish - that is, *distribute* - the message to all subscribers.  
+
+![EventPublisher][../.images/EventPublisher.png]
+*EventPublisher diagram*
 
 Ref:  
     + [Whiteboard][2]: feature suggestions  
