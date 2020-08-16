@@ -2,7 +2,11 @@
 ## Core library: utility & function  
 ____________________________________________________________________________________________________  
 [Home][1] | [Whiteboard][2]
-  
+
+### The Whiteboard
+For features, suggestions, etc. If an item is taken up for implementation, create an issue and remove 
+from this page.
+
 * **Configuration**:
    - Settings Sections
    - Section Attributes: Readable, Sericalized, Encoded, Encrypted
