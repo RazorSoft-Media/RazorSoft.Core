@@ -1,8 +1,8 @@
-/* ***********************************************
- *  © 2020 RazorSoft Media, DBA
- *         Lone Star Logistics & Transport, LLC. All Rights Reserved
- *         David Boarman
- * ***********************************************/
+//	* *************************************************************************
+//	*  © 2020      RazorSoft Media, DBA                                       *
+//	*              Lone Star Logistics & Transport, LLC.                      *
+//	*              All Rights Reserved                                        *
+//	* *************************************************************************
 
 
 using System;
@@ -25,12 +25,14 @@ namespace UnitTest.RazorSoft.Core {
         private int loadId;
         private string action;
 
+        #region test harness configuration
         [TestInitialize]
         public void InitializeTest() {
             hasEvent = false;
             loadId = -1;
             action = string.Empty;
         }
+        #endregion
 
         [TestMethod]
         public void AddEventSubscription() {
@@ -96,7 +98,28 @@ namespace UnitTest.RazorSoft.Core {
             Assert.AreEqual(expLoadInfo.Action, action);
         }
 
+        [TestMethod]
+        public void EventMessageAsInterface() {
+            var expLoadId = 5;
+            var expLoadAction = "DROPPED";
+
+            eventAggregator.CreatePublication<ILoadEventMessage>();
+            eventAggregator.Subscribe<ILoadEventMessage>(ProcessLoadEvent);
+
+            ((ILoadEventMessage)new LoadEventMessage(expLoadId, expLoadAction)).Publish();
+
+            Assert.IsTrue(hasEvent);
+            Assert.AreEqual(expLoadId, loadId);
+            Assert.AreEqual(expLoadAction, action);
+        }
+
         private void ProcessLoadEvent(LoadEventMessage eventMessage) {
+            hasEvent = true;
+            loadId = eventMessage.LoadId;
+            action = eventMessage.Action;
+        }
+
+        private void ProcessLoadEvent(ILoadEventMessage eventMessage) {
             hasEvent = true;
             loadId = eventMessage.LoadId;
             action = eventMessage.Action;

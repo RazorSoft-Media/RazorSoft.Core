@@ -122,8 +122,3 @@ publish/
 # Microsoft Fakes
 FakesAssemblies/
 *.dll
-*.dll
-Resource References/InsightP2P.Client.dll
-Resource References/InsightP2P.Data.dll
-Resource References/InsightP2P.Data.dll
-*.dll
