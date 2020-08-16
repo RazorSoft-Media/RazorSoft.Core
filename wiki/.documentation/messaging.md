@@ -23,17 +23,68 @@ commands:
 * command object
 * hybrid
 
-```cs
-//	TODO: insert CommandRouter design diagram
-```  
+![CommandRouter](../.images/CommandRouter.png)  
 *CommandRouter diagram*
 
 Like publishing `EventMessage` messages, any object with a view (reference to) of a `Command` can 
 execute the command.
 
+Given these classes, we can configure commands that can be executed by any object that has reference 
+to the API interface. This keeps the API implementation far removed from front end objects. 
+
+`ICalculator` could be any *BusinessLogic* or *DataAccess* API.  
+
 ```cs
-//	TODO: insert code samples
+//	interface as an API
+public interface ICalculator {
+	int Add (int i1, int i2);
+	int Subtract (int i1, int i2);
+}
+
+//	API implementation
+private class Calculator : ICalculator {
+	
+	public int Add (int i1, int i2) {
+		return i1 + i2;
+	}
+	
+	public int Subtract (int i1, int i2) {
+		return i1 - i2;
+	}
+}
 ```  
+
+Put *API interfaces* into a *Messaging* library with public exposure keeping implementation details 
+behind any number of layers.
+
+1. register the interface as a command API:
+```cs
+//	somewhere in the back end
+internal class BackendClass {
+	private static readonly CommandRouter commandRouter = CommandRouter.Default;
+	
+	internal BackendClass () {
+		commandRouter.AddCommandTarget<ICalculator>(new Calculator());
+	}	
+}
+```
+
+2. expose the Command API:
+```cs
+//	in a publicly accessible library
+public static class CalculatorAPI {
+	public Command<ICalculator> Calculator = (o) => { return (ICalculator)o; };
+}
+```
+
+3. use the Command API:
+```cs
+//	returns 6
+var sum = Calculator.Execute((ICalculator c) => c.Add(2, 4));
+
+//	returns 3
+var diff = Calculator.Execute((ICalculator c) => c.Subtract(12, 9));
+```
 
 Ref:  
     + [Whiteboard][2]: feature suggestions  
