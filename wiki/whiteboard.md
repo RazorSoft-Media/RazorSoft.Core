@@ -16,8 +16,9 @@ from this page.
    - EventPublisher
      - Asynchronous publications: defaults event publishing to asynchronous distribution
 	 - PublishAsync method: publishes specifically to asynchronous distribution
-   
-
+   - CommandRouter
+     - Add Command API routing allow to `void` return
+	 - ExecuteAsync method: execute commands async (with `await` and `await Task<T>`
 
 ____________________________________________________________________________________________________   
 © 2020 RazorSoft Media, DBA  
