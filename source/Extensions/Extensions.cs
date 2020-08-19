@@ -25,6 +25,35 @@ namespace RazorSoft.Core.Extensions {
             return dateTime > DateTime.MinValue;
         }
         /// <summary>
+        /// Abbreviates a file path to given depth from the specified file info for display purposes 
+        /// </summary>
+        /// <param name="fInfo">specified file info</param>
+        /// <param name="depth">abbreviated depth; DEFAULT=1</param>
+        /// <returns>(string) abbreviated file for display purposes</returns>
+        public static string AbbreviatePath(this FileInfo fInfo, int depth = 1) {
+            var dirParts = fInfo.Directory.FullName
+                .Split(@"\");
+            var end = dirParts.Length;
+            var filName = fInfo.Name;
+            var abbreviated = dirParts[^depth..end];
+
+            return $@"...\{string.Join(@"\", abbreviated)}\{filName}";
+        }
+        /// <summary>
+        /// Abbreviates a directory path to given depth from the specified directory info for display purposes
+        /// </summary>
+        /// <param name="dInfo">specified directory info</param>
+        /// <param name="depth">abbreviated depth; DEFAULT=1</param>
+        /// <returns>(string) abbreviated directory for display purposes</returns>
+        public static string AppreviatePath(this DirectoryInfo dInfo, int depth = 1) {
+            var dirParts = dInfo.FullName
+                .Split(@"\", StringSplitOptions.RemoveEmptyEntries);
+            var end = dirParts.Length;
+            var abbreviated = dirParts[^depth..end];
+
+            return $@"...\{string.Join(@"\", abbreviated)}\";
+        }
+        /// <summary>
         /// Combines directory paths using DirectoryInfo object as the target
         /// </summary>
         /// <param name="root">The root directory</param>

@@ -5,6 +5,7 @@
  * ***********************************************/
 
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SysEnviron = System.Environment;
 //
 using RazorSoft.Core.Extensions;
-using System;
+
 
 namespace UnitTest.RazorSoft.Core {
     [TestClass]
@@ -23,6 +24,8 @@ namespace UnitTest.RazorSoft.Core {
 
         private string testPath;
 
+
+        #region test harness configuration
         [TestCleanup]
         public void CleanupTest() {
             testPath = currentDirectory.CombinePaths(subDirs[0]).FullName;
@@ -32,8 +35,9 @@ namespace UnitTest.RazorSoft.Core {
                 Directory.Delete(testPath, true);
             }
 
-            Assert.IsTrue(!Directory.Exists(testPath), $"{testPath} exists");
-         }
+            Assert.IsFalse(Directory.Exists(testPath), $"{testPath} exists");
+        }
+        #endregion
 
         [TestMethod]
         public void CombineDirectoryPaths_1() {
@@ -61,10 +65,72 @@ namespace UnitTest.RazorSoft.Core {
             var actFullPath = new DirectoryInfo(expFullPath).CreatePath();
 
             Assert.AreEqual(expFullPath, actFullPath);
-
             Debug.WriteLine($"Full path [{actFullPath}] exists: {Directory.Exists(actFullPath)}");
 
             testPath = actFullPath;
+        }
+
+        [TestMethod]
+        public void AbbreviateFilePath() {
+            var expFilePath = $@"{currentDirectory.FullName}\radium\test.txt";
+
+            //  test path
+            var fullPath = $@"{currentDirectory.FullName}\radium\";
+            testPath = new DirectoryInfo(fullPath).CreatePath();
+            //  ---------
+
+            var filePath = Path.Combine(testPath, "test.txt");
+
+            FileInfo fInfo;
+
+            using(var f = File.Create(filePath)) {
+                fInfo = new FileInfo(filePath);
+            }
+
+            var actFilePath = fInfo.FullName;
+
+            Assert.AreEqual(expFilePath, actFilePath);
+            Debug.WriteLine($"Full path [{actFilePath}] exists: {File.Exists(actFilePath)}");
+
+            //  abbreviated depth: 1 (DEFAULT)
+            var expLvl1AbbrPath = @"...\radium\test.txt";
+            var actLvl1AbbrPath = fInfo.AbbreviatePath();
+
+            Assert.AreEqual(expLvl1AbbrPath, actLvl1AbbrPath);
+            Debug.WriteLine($"Abbreviated path (Depth=1) [{actLvl1AbbrPath}]");
+
+            //  abbreviated depth: 3
+            var expLvl2AbbrPath = @"...\Debug\netcoreapp3.1\radium\test.txt";
+            var actLvl2AbbrPath = fInfo.AbbreviatePath(3);
+
+            Assert.AreEqual(expLvl2AbbrPath, actLvl2AbbrPath);
+            Debug.WriteLine($"Abbreviated path (Depth=3) [{actLvl2AbbrPath}]");
+
+            File.Delete(fInfo.FullName);
+        }
+
+        [TestMethod]
+        public void AbbreviateDirectoryPath() {
+            //  trailing '\' would cause an empty entry 
+            //    - fixed using StringSplitOptions.RemoveEmptyEntries
+            var fullPath = $@"{currentDirectory.FullName}\radium\depth_2\depth_1\";
+            DirectoryInfo testDirectory;
+            testPath = (testDirectory = new DirectoryInfo(fullPath)).CreatePath();
+
+            //  abbreviated depth: 1 (DEFAULT)
+            var expLvl1AbbrPath = @"...\depth_1\";
+            var actLvl1AbbrPath = testDirectory.AppreviatePath();
+
+            Assert.AreEqual(expLvl1AbbrPath, actLvl1AbbrPath);
+            Debug.WriteLine($"Abbreviated path (Depth=1) [{actLvl1AbbrPath}]");
+
+            //  abbreviated depth: 3
+            var expLvl2AbbrPath = @"...\radium\depth_2\depth_1\";
+            var actLvl2AbbrPath = testDirectory.AppreviatePath(3);
+
+            Assert.AreEqual(expLvl2AbbrPath, actLvl2AbbrPath);
+            Debug.WriteLine($"Abbreviated path (Depth=3) [{actLvl2AbbrPath}]");
+
         }
     }
 }
