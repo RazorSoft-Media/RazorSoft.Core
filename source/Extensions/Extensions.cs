@@ -45,7 +45,7 @@ namespace RazorSoft.Core.Extensions {
         /// <param name="dInfo">specified directory info</param>
         /// <param name="depth">abbreviated depth; DEFAULT=1</param>
         /// <returns>(string) abbreviated directory for display purposes</returns>
-        public static string AppreviatePath(this DirectoryInfo dInfo, int depth = 1) {
+        public static string AbbreviatePath(this DirectoryInfo dInfo, int depth = 1) {
             var dirParts = dInfo.FullName
                 .Split(@"\", StringSplitOptions.RemoveEmptyEntries);
             var end = dirParts.Length;

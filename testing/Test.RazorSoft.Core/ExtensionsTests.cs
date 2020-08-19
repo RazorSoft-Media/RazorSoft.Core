@@ -119,14 +119,14 @@ namespace UnitTest.RazorSoft.Core {
 
             //  abbreviated depth: 1 (DEFAULT)
             var expLvl1AbbrPath = @"...\depth_1\";
-            var actLvl1AbbrPath = testDirectory.AppreviatePath();
+            var actLvl1AbbrPath = testDirectory.AbbreviatePath();
 
             Assert.AreEqual(expLvl1AbbrPath, actLvl1AbbrPath);
             Debug.WriteLine($"Abbreviated path (Depth=1) [{actLvl1AbbrPath}]");
 
             //  abbreviated depth: 3
             var expLvl2AbbrPath = @"...\radium\depth_2\depth_1\";
-            var actLvl2AbbrPath = testDirectory.AppreviatePath(3);
+            var actLvl2AbbrPath = testDirectory.AbbreviatePath(3);
 
             Assert.AreEqual(expLvl2AbbrPath, actLvl2AbbrPath);
             Debug.WriteLine($"Abbreviated path (Depth=3) [{actLvl2AbbrPath}]");
