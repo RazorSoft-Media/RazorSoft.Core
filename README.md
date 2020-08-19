@@ -16,6 +16,6 @@ ________________________________________________________________________________
 [1]: README.md  
 [2]: wiki/whiteboard.md
 
-[3]: wiki/.documentation/releases.md  
+[3]: wiki/.documentation/releases_notes.md  
 [6]: wiki/.documentation/configuration.md  
 [7]: wiki/.documentation/messaging.md
