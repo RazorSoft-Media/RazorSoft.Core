@@ -95,3 +95,4 @@ C:\LSLT Software Development\RazorSoft.Core\testing\Test.RazorSoft.Core\obj\Debu
 C:\LSLT Software Development\RazorSoft.Core\testing\Test.RazorSoft.Core\obj\Debug\netcoreapp3.1\Test.RazorSoft.Core.dll
 C:\LSLT Software Development\RazorSoft.Core\testing\Test.RazorSoft.Core\obj\Debug\netcoreapp3.1\Test.RazorSoft.Core.pdb
 C:\LSLT Software Development\RazorSoft.Core\testing\Test.RazorSoft.Core\obj\Debug\netcoreapp3.1\Test.RazorSoft.Core.genruntimeconfig.cache
+C:\LSLT Software Development\RazorSoft.Core\testing\Test.RazorSoft.Core\bin\Debug\netcoreapp3.1\RazorSoft.Core.xml
