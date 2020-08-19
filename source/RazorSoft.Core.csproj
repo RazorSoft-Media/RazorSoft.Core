@@ -4,15 +4,22 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Copyright>2020</Copyright>
     <Company>RazorSoft Media, DBA</Company>
-    <Authors>David Boarman</Authors>
+    <Authors>RazorSoft Media</Authors>
     <Configuration>Debug</Configuration>
-    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <InformationalVersion>1.0.0.0</InformationalVersion>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <AssemblyTitle>RazorSoft.Core</AssemblyTitle>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId />
-    <Version>1.0</Version>
+    <Version>1.0.1</Version>
+    <PackageProjectUrl>https://github.com/RazorSoft-Media/RazorSoft.Core</PackageProjectUrl>
+    <Description>Core functions, utilities and classes</Description>
+    <RepositoryUrl>https://github.com/RazorSoft-Media/RazorSoft.Core</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>See Release Notes: https://github.com/RazorSoft-Media/RazorSoft.Core/blob/master/wiki/.documentation/release_notes.md
+</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
