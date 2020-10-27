@@ -1,8 +1,4 @@
-﻿//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+﻿// Copyright © 2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
@@ -42,7 +38,7 @@ namespace RazorSoft.Core {
             var ctor = type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null);
 
             if (ctor == null) {
-                throw new InvalidOperationException("Singleton must have a non-punlic parameterless constructor");
+                throw new InvalidOperationException("Singleton must have a non-public parameterless constructor");
             }
 
             return (ctor.Invoke(null) as TSingleton);

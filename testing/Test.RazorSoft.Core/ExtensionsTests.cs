@@ -1,8 +1,4 @@
-/* ***********************************************
- *  © 2020 RazorSoft Media, DBA
- *         Lone Star Logistics & Transport, LLC. All Rights Reserved
- *         David Boarman
- * ***********************************************/
+// Copyright © 2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
