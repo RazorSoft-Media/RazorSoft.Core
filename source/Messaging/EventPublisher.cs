@@ -1,8 +1,4 @@
-//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+// Copyright © 2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
@@ -44,7 +40,12 @@ namespace RazorSoft.Core.Messaging {
             subsDistribution = new Dictionary<Type, IList<Delegate>>();
         }
 
-
+        /// <summary>
+        /// Clears all publications
+        /// </summary>
+        public void ClearPublications() {
+            subsDistribution.Clear();
+        }
         /// <summary>
         /// Create an event message publication
         /// </summary>
