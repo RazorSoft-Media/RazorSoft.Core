@@ -7,7 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="SettingTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\RazorSoft.Media\source\Drawing\Point2D.cs" Link=".RazorSoft.Media\Point2D.cs" />
+    <Compile Include="..\..\..\RazorSoft.Media\source\Drawing\Vector.cs" Link=".RazorSoft.Media\Vector.cs" />
+    <Compile Include="..\..\..\RazorSoft.Media\source\Drawing\Vector2D.cs" Link=".RazorSoft.Media\Vector2D.cs" />
+    <Compile Include="..\..\data\.RazorSoft.Source\PointsArray.cs" Link=".RazorSoft.Source\PointsArray.cs" />
+    <Compile Include=".RazorSoft.Source\TestExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".Data\points.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -21,11 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\..\source\RazorSoft.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\RazorSoft.Core.csproj" />
+    <Folder Include=".RazorSoft.Media\" />
   </ItemGroup>
 
 </Project>

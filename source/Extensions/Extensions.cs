@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace RazorSoft.Core.Extensions {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Extensions {
         /// <summary>
         /// Determines if a given DateTime is valid: ie, greater than the

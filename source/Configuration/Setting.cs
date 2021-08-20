@@ -1,8 +1,4 @@
-﻿//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+﻿// Copyright © 2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
