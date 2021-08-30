@@ -1,8 +1,4 @@
-//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+// Copyright: ©2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
@@ -10,7 +6,12 @@ using System.Collections.Generic;
 
 
 namespace RazorSoft.Core.Messaging {
-    public delegate TTarget Command<TTarget>(object obj);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TTarget"></typeparam>
+    /// <returns></returns>
+    public delegate TTarget Command<TTarget>();
 
     /// <summary>
     /// CommandRouter: singleton
@@ -35,19 +36,21 @@ namespace RazorSoft.Core.Messaging {
 
 
         /// <summary>
-        /// Add a command routing to specified target
+        /// Add command target routing
         /// </summary>
         /// <typeparam name="TTarget">target type</typeparam>
         /// <param name="target">specified target</param>
-        public void AddCommandTarget<TTarget>(TTarget target) {
+        public Command<TTarget> AddCommandTarget<TTarget>(TTarget target) {
             var type = typeof(TTarget);
 
             if (!commandTargets.ContainsKey(type)) {
                 commandTargets.Add(type, target);
             }
+
+            return () => target;
         }
         /// <summary>
-        /// Remove a command routing
+        /// Remove command target routing
         /// </summary>
         /// <typeparam name="TTarget">target type</typeparam>
         public void RemoveCommandTarget<TTarget>() {

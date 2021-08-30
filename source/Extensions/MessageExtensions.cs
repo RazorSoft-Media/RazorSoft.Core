@@ -1,8 +1,4 @@
-//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+// Copyright: ©2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
@@ -12,6 +8,9 @@ using RazorSoft.Core.Messaging;
 
 namespace RazorSoft.Core.Extensions {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MessageExtensions {
 
         /// <summary>
