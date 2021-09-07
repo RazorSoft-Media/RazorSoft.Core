@@ -15,13 +15,25 @@ using RazorSoft.Core.Extensions;
 namespace UnitTest.RazorSoft.Core {
     [TestClass]
     public class ExtensionsTests {
+        private const string EXP_DATA_FILE = @"..\..\..\..\data\data.json";
+
         private static DirectoryInfo currentDirectory = new DirectoryInfo(SysEnviron.CurrentDirectory);
         private static string[] subDirs = { "radium", "test0", "test1", "test2" };
 
+        private TestContext context;
         private string testPath;
 
-
         #region test harness configuration
+        public TestContext TestContext {
+            get => context;
+            set => context = value;
+        }
+
+        [ClassInitialize]
+        public static void InitializeTestHarness(TestContext context) {
+            Assert.IsTrue(File.Exists(EXP_DATA_FILE));
+        }
+
         [TestCleanup]
         public void CleanupTest() {
             testPath = currentDirectory.CombinePaths(subDirs[0]).FullName;
@@ -34,6 +46,7 @@ namespace UnitTest.RazorSoft.Core {
             Assert.IsFalse(Directory.Exists(testPath), $"{testPath} exists");
         }
         #endregion
+
 
         [TestMethod]
         public void CombineDirectoryPaths_1() {
@@ -96,7 +109,7 @@ namespace UnitTest.RazorSoft.Core {
             Debug.WriteLine($"Abbreviated path (Depth=1) [{actLvl1AbbrPath}]");
 
             //  abbreviated depth: 3
-            var expLvl2AbbrPath = @"...\Debug\netcoreapp3.1\radium\test.txt";
+            var expLvl2AbbrPath = @"...\Debug\net5.0\radium\test.txt";
             var actLvl2AbbrPath = fInfo.AbbreviatePath(3);
 
             Assert.AreEqual(expLvl2AbbrPath, actLvl2AbbrPath);
@@ -128,5 +141,66 @@ namespace UnitTest.RazorSoft.Core {
             Debug.WriteLine($"Abbreviated path (Depth=3) [{actLvl2AbbrPath}]");
 
         }
+
+        [TestMethod]
+        public void SetSimpleDirectoryRoot() {
+            //  ".\testing\"
+            var expPath = new DirectoryInfo(EXP_DATA_FILE).Parent.Parent;
+
+            Assert.AreEqual("testing", expPath.Name);
+            Assert.IsTrue(currentDirectory.SetRoot(@"testing", out DirectoryInfo actPath));
+
+            Assert.AreEqual(expPath.FullName, actPath.FullName);
+
+            Log($"rooted path: {actPath}");
+        }
+
+        [TestMethod]
+        public void SetComplexDirectoryRoot() {
+            //  ".\testing\data"
+            var expPath = new DirectoryInfo(EXP_DATA_FILE).Parent;
+
+            Assert.AreEqual("testing", expPath.Parent.Name);
+            Assert.IsTrue(currentDirectory.SetRoot(@"testing\data", out DirectoryInfo actPath));
+
+            Assert.AreEqual(expPath.FullName, actPath.FullName);
+
+            Log($"rooted path: {actPath}");
+        }
+
+        [TestMethod]
+        public void ExtendDirectoryToRoot() {
+            var expPath = new DirectoryInfo(EXP_DATA_FILE).Parent;
+
+            //  ".\testing\"
+            currentDirectory.SetRoot(@"testing", out DirectoryInfo path);
+            Log($"original path: {path}");
+
+            //   extend the path to a child directory by prepending new root with '.\'
+            //  ".\testing\data"
+            Assert.IsTrue(path.SetRoot(@".\data", out DirectoryInfo actPath), $"did not extend root: {expPath} [{(actPath?.FullName ?? "empty")}]");
+            Assert.AreEqual(expPath.FullName, actPath.FullName);
+
+            Log($"rooted path: {actPath}");
+        }
+
+        [TestMethod]
+        public void AbbreviatePathToKnownDirectory() {
+            var dataPath = new DirectoryInfo(EXP_DATA_FILE).Parent;
+            var expAbbreviatedPath = @"...\testing\data\";
+
+            var actAbbreviatedPath = dataPath.AbbreviatePath("testing");
+
+            Assert.AreEqual(expAbbreviatedPath, actAbbreviatedPath);
+
+            Log($"original [{dataPath.FullName}] abbreviated [{actAbbreviatedPath}]");
+        }
+
+
+        #region 	utility methods
+        private void Log(string entry) {
+            TestContext.WriteLine($"[{TestContext.TestName}]:\t{entry}");
+        }
+        #endregion	utility methods
     }
 }

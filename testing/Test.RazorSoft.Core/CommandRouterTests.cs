@@ -19,7 +19,7 @@ namespace UnitTest.RazorSoft.Core {
         public void ExecuteCommandTask() {
             var expResult = 6;
 
-            commandRouter.AddCommandTarget<ITaskInterface>(new CommandAPI());
+            commandRouter.AddRoute<ITaskInterface>(new CommandAPI());
 
             var actResult = new AddCommand().Execute((CommandAPI api) => api.Add(2, 4));
 
@@ -31,7 +31,7 @@ namespace UnitTest.RazorSoft.Core {
             var expAddResult = 6;
             var expSubResult = 23;
 
-            var api = commandRouter.AddCommandTarget<IDelegateInterface>(new CommandAPI());
+            var api = commandRouter.AddRoute<IDelegateInterface>(new CommandAPI());
 
             int Add(int x, int y) {
                 return api.Execute((api) => api.Add(2, 4));

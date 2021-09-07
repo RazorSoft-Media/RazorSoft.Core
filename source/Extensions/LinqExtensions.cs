@@ -2,6 +2,8 @@
 
 
 using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -11,7 +13,19 @@ namespace RazorSoft.Core.Linq {
     /// 
     /// </summary>
     public static class LinqExtensions {
-		
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="toAppend"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, IEnumerable<T> toAppend) {
+            var s = source.ToList();
+            s.AddRange(toAppend);
+
+            return s;
+        }
         /// <summary>
         /// Executes a standard action on each item within the collection.
         /// </summary>
@@ -23,9 +37,9 @@ namespace RazorSoft.Core.Linq {
                 action(e);
             }
         }
-
         /// <summary>
-        /// 
+        /// ???
+        /// NOTE: how is this different from System.Linq ???
         /// </summary>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="enumerator"></param>
@@ -41,6 +55,17 @@ namespace RazorSoft.Core.Linq {
                 yield return enumerator.Current;
 
                 ++count;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TItem"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="items"></param>
+        public static void AddRange(this IList source, IEnumerable items) {
+            foreach(var i in items) {
+                source.Add(i);
             }
         }
     }

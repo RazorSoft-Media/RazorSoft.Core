@@ -53,6 +53,21 @@ namespace RazorSoft.Core.Extensions {
             return $@"...\{string.Join(@"\", abbreviated)}\";
         }
         /// <summary>
+        /// Abbreviates a directory path not to exceed an existing folder in the path for display purposes
+        /// </summary>
+        /// <param name="dInfo">specified directory info</param>
+        /// <param name="root">root folder at the head of the abbreviation</param>
+        /// <returns>(string) abbreviated directory for display purposes</returns>
+        public static string AbbreviatePath(this DirectoryInfo dInfo, string root) {
+            var dirParts = dInfo.FullName
+                .Split(@"\", StringSplitOptions.RemoveEmptyEntries);
+            var start = Array.IndexOf(dirParts, root);
+            var end = dirParts.Length;
+            var abbreviated = dirParts[start..end];
+
+            return $@"...\{string.Join(@"\", abbreviated)}\";
+        }
+        /// <summary>
         /// Combines directory paths using DirectoryInfo object as the target
         /// </summary>
         /// <param name="root">The root directory</param>
@@ -66,6 +81,57 @@ namespace RazorSoft.Core.Extensions {
             Array.Copy(paths, 0, subDirs, 2, paths.Length);
 
             return new DirectoryInfo(Path.Combine(subDirs));
+        }
+        /// <summary>
+        /// Sets the root to a specified directory in the current path
+        /// </summary>
+        /// <param name="path">current path</param>
+        /// <param name="pathToRoot">path to set as root</param>
+        /// <param name="root">DirectoryInfo: root</param>
+        /// <returns>TRUE if success; otherwise FALSE</returns>
+        public static bool SetRoot(this DirectoryInfo path, string pathToRoot, out DirectoryInfo root) {
+            root = default;
+            //  get root to set parts
+            var pathMembers = pathToRoot
+                .Split(@"\", StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+
+            if (pathMembers[0] != ".") {
+                //  traverse up path until we find the first part of root to set
+                while (path.Name != pathMembers[0]) {
+                    if (path.Parent == null) {
+                        return false;
+                    }
+
+                    path = path.Parent;
+                }
+
+                pathMembers.Insert(0, path.Parent.FullName);
+            }
+            else {
+                pathMembers.RemoveAt(0);
+                pathMembers.Insert(0, path.FullName);
+            }
+
+
+            root = new(Path.Combine(pathMembers.ToArray()));
+
+            return root.Exists;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="destination"></param>
+        /// <param name="clonePath"></param>
+        /// <returns></returns>
+        public static bool Clone(this FileInfo file, string destination, out string clonePath) {
+            var source = file.FullName;
+            clonePath = Path.Combine(destination, file.Name);
+
+            File.Copy(source, clonePath, true);
+
+            return File.Exists(clonePath);
         }
         /// <summary>
         /// Get the size of a file from the specified file info object.
@@ -110,7 +176,8 @@ namespace RazorSoft.Core.Extensions {
 
             if (directory.Exists) {
                 return directory.FullName;
-            } else {
+            }
+            else {
                 return string.Empty;
             }
         }
@@ -151,6 +218,7 @@ namespace RazorSoft.Core.Extensions {
         /// Formats given DateTime: HH:mm:ssss:    {entry}
         /// </summary>
         /// <param name="time">supplied DateTime value</param>
+        /// <param name="entry">supplied string log entry</param>
         /// <returns>(string) "HH:mm:ssss:    {entry}"</returns>
         public static string AsLogEntry(this DateTime time, string entry) {
             return $"{time:HH:mm:sss}:    {entry}";

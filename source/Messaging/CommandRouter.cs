@@ -40,7 +40,7 @@ namespace RazorSoft.Core.Messaging {
         /// </summary>
         /// <typeparam name="TTarget">target type</typeparam>
         /// <param name="target">specified target</param>
-        public Command<TTarget> AddCommandTarget<TTarget>(TTarget target) {
+        public Command<TTarget> AddRoute<TTarget>(TTarget target) {
             var type = typeof(TTarget);
 
             if (!commandTargets.ContainsKey(type)) {
@@ -50,10 +50,24 @@ namespace RazorSoft.Core.Messaging {
             return () => target;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <returns></returns>
+        public Command<TTarget> GetRoute<TTarget>() {
+            var route = default(Command<TTarget>);
+
+            if (commandTargets.TryGetValue(typeof(TTarget), out object target)) {
+                route = () => (TTarget)target;
+            }
+
+            return route;
+        }
+        /// <summary>
         /// Remove command target routing
         /// </summary>
         /// <typeparam name="TTarget">target type</typeparam>
-        public void RemoveCommandTarget<TTarget>() {
+        public void RemoveRoute<TTarget>() {
             var type = typeof(TTarget);
 
             if (commandTargets.ContainsKey(type)) {
