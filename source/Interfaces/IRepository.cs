@@ -30,11 +30,15 @@ namespace RazorSoft.Core.Data {
         /// </summary>
         T Add(T item);
         /// <summary>
-        /// Update given record item
+        /// Commit data changes to the underlying data store
+        /// </summary>
+        void Commit();
+        /// <summary>
+        /// Update data object
         /// </summary>
         bool Update(T item);
         /// <summary>
-        /// 
+        /// Update data object batch
         /// </summary>
         bool Update(IEnumerable<T> itemList);
         /// <summary>
