@@ -3,13 +3,17 @@
 
 using System;
 using System.Linq;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 //
 using RazorSoft.Core.Data;
+using RazorSoft.Core.Linq;
 using RazorSoft.Core.Messaging;
 using RazorSoft.Core.Extensions;
+//
 using Testing.Dexter.Services;
+
 
 namespace Testing.Dexter.Data.Repositories {
 
@@ -17,7 +21,9 @@ namespace Testing.Dexter.Data.Repositories {
     /// 
     /// </summary>
     public sealed class OrganizationRepository : RepositoryBase<Organization> {
-        #region		fields
+        #region		fields 
+        private const string DATA_FILE = "organizations.json";
+
         private static readonly Command<IOrganizationAPI> API = CommandRouter.Default.GetRoute<IOrganizationAPI>();
         #endregion	fields
 
@@ -28,7 +34,7 @@ namespace Testing.Dexter.Data.Repositories {
 
 
         #region		constructors & destructors
-        public OrganizationRepository() : base(new JsonRepository<Organization>("organizations.json")) {
+        public OrganizationRepository() : base(new OrganizationContext()) {
 
         }
 
@@ -42,7 +48,7 @@ namespace Testing.Dexter.Data.Repositories {
 
         #region		non-public methods & functions
         protected override bool OnAdd(Organization organization) {
-            if (string.IsNullOrEmpty(organization.Id)) {
+            if (string.IsNullOrEmpty(organization.Key)) {
                 CreateId(organization);
             }
 
@@ -54,7 +60,7 @@ namespace Testing.Dexter.Data.Repositories {
         }
 
         private bool Duplicate(Organization organiation) {
-            return !All().Any(o => organiation.Id == o.Id);
+            return !All().Any(o => organiation.Key == o.Key);
         }
 
 
@@ -73,6 +79,34 @@ namespace Testing.Dexter.Data.Repositories {
 
 
         #region     private classes
+        private class OrganizationContext : JsonRepository<Organization> {
+
+            #region		properties
+
+            #endregion	properties
+
+
+            #region		constructors & destructors
+            public OrganizationContext() : base(DATA_FILE) {
+                Load();
+            }
+            #endregion	constructors & destructors
+
+
+            #region		non-public methods & functions
+            protected override void OnInitialized() {
+                //  prevent loading when base JsonRepository is intialized
+            }
+
+            protected override ICollection OnRead(JsonLoader loader) {
+                return loader.Read<List<Organization>>();
+            }
+
+            protected override void OnWrite(JsonLoader loader) {
+                loader.Write(Cache().ToList<Organization>());
+            }
+            #endregion	non-public methods & functions
+        }
         #endregion  private classes
 
     }

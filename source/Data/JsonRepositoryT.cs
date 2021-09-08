@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+
 namespace RazorSoft.Core.Data {
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace RazorSoft.Core.Data {
     /// <summary>
     /// 
     /// </summary>
-    public class JsonRepository<TEntity> : JsonRepository, IObjectContext<TEntity> where TEntity : class, new() {
+    public abstract class JsonRepository<TEntity> : JsonRepository, IObjectContext<TEntity> where TEntity : class, new() {
         #region		fields
         private readonly InternalCache cache = new();
         #endregion	fields
@@ -44,9 +45,7 @@ namespace RazorSoft.Core.Data {
         /// 
         /// </summary>
         /// <param name="dataFile"></param>
-        public JsonRepository(string dataFile) : base(dataFile) {
-            Load<TEntity>();
-        }
+        public JsonRepository(string dataFile) : base(dataFile) { }
         #endregion	constructors & destructors
 
 
@@ -55,8 +54,13 @@ namespace RazorSoft.Core.Data {
         /// 
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<TEntity> All() {
-            return All<TEntity>();
+        IEnumerable<TEntity> IObjectContext<TEntity>.All() {
+            var iterator = All().GetEnumerator();
+            while (iterator.MoveNext()) {
+                if(iterator.Current is TEntity entity) {
+                    yield return entity;
+                }
+            }
         }
         /// <summary>
         /// <inheritdoc/>
@@ -71,15 +75,15 @@ namespace RazorSoft.Core.Data {
         /// <summary>
         /// 
         /// </summary>
-        public void Commit() {
-            Commit<TEntity>();
+        void IObjectContext<TEntity>.Commit() {
+            Save();
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Remove(TEntity item) {
+        bool IObjectContext<TEntity>.Remove(TEntity item) {
             return cache.Remove(item);
         }
         /// <summary>
@@ -87,7 +91,7 @@ namespace RazorSoft.Core.Data {
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Update(TEntity item) {
+        bool IObjectContext<TEntity>.Update(TEntity item) {
             throw new NotImplementedException("Update item not implemented");
         }
         /// <summary>
@@ -95,7 +99,7 @@ namespace RazorSoft.Core.Data {
         /// </summary>
         /// <param name="itemList"></param>
         /// <returns></returns>
-        public bool Update(IEnumerable<TEntity> itemList) {
+        bool IObjectContext<TEntity>.Update(IEnumerable<TEntity> itemList) {
             throw new NotImplementedException("Update range not implemented");
         }
 
@@ -104,20 +108,25 @@ namespace RazorSoft.Core.Data {
 
         #region		non-public methods & functions
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        protected override void OnLoad(IEnumerable data) {
-            cache.AddRange(data.OfType<TEntity>());
-        }
-        /// <summary>
-        /// 
+        /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         protected override IList Cache() {
             return cache;
         }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="data"></param>
+        protected override void OnDataLoaded(IEnumerable data) {
+            cache.AddRange(data.OfType<TEntity>());
+        }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        protected override void OnInitialized() {
+            Load();
+        }
         #endregion	non-public methods & functions
 
 

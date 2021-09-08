@@ -24,7 +24,7 @@ namespace RazorSoft.Core.Data {
         /// <summary>
         /// Finds all records matching specified query criteria
         /// </summary>
-        IEnumerable<T> Find(Expression<Func<T, bool>> query);
+        IEnumerable<T> Get(Expression<Func<T, bool>> query);
         /// <summary>
         /// Add a record of the specified Type
         /// </summary>

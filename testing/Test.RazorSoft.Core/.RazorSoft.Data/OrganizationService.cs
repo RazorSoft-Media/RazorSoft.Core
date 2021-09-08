@@ -48,14 +48,14 @@ namespace Testing.Dexter.Services {
         /// <param name="exists">TRUE if created; otherwise FALSE</param>
         /// <returns>string: organization folder path</returns>
         public string CreateFolder(Organization organization, out bool exists) {
-            if (string.IsNullOrEmpty(organization.Id)) {
+            if (string.IsNullOrEmpty(organization.Key)) {
                 CreateId(organization);
             }
 
             var directory = @".\.Data";
 
             if (Directory.Exists(directory)) {
-                directory = Path.Combine(directory, organization.Id);
+                directory = Path.Combine(directory, organization.Key);
 
                 if (!Directory.Exists(directory)) {
                     Directory.CreateDirectory(directory);
@@ -131,7 +131,7 @@ namespace Testing.Dexter.Services {
                 .Append(abr.ToString())
                 .ToArray();
 
-            return organization.Id = new string(ot).ToUpper();
+            return organization.Key = new string(ot).ToUpper();
         }
         /// <summary>
         /// <inheritdoc/>
@@ -139,7 +139,7 @@ namespace Testing.Dexter.Services {
         /// <param name="organization">target organization</param>
         /// <returns>TRUE if exists; otherwise FALSE</returns>
         public bool FolderExists(Organization organization) {
-            var directory = Path.Combine(@".\.Data", organization.Id);
+            var directory = Path.Combine(@".\.Data", organization.Key);
 
             return Directory.Exists(directory);
         }
@@ -151,7 +151,7 @@ namespace Testing.Dexter.Services {
         /// <returns>string: organization folder path</returns>
         public string GetFolder(Organization organization, out bool exists) {
             return (exists = FolderExists(organization)) ?
-                Path.Combine(@".\.Data", organization.Id) :
+                Path.Combine(@".\.Data", organization.Key) :
                 string.Empty;
         }
         /// <summary>
@@ -164,7 +164,7 @@ namespace Testing.Dexter.Services {
             var organization = Get(organizationId);
 
             return (exists = FolderExists(organization)) ?
-                Path.Combine(@".\.Data", organization.Id) :
+                Path.Combine(@".\.Data", organization.Key) :
                 string.Empty;
         }
         /// <summary>
@@ -180,7 +180,7 @@ namespace Testing.Dexter.Services {
             }
 
             foreach(var o in orgList) {
-                CACHE.Remove(o.Id);
+                CACHE.Remove(o.Key);
             }
 
             return result;
@@ -194,11 +194,11 @@ namespace Testing.Dexter.Services {
             if (!CACHE.TryGetValue(organizationId, out Organization organization)) {
                 using (IRepository<Organization> repo = new OrganizationRepository()) {
                     organization = repo.All()
-                        .Where(o => string.Equals(organizationId, o.Id))
+                        .Where(o => string.Equals(organizationId, o.Key))
                         .FirstOrDefault();
                 }
 
-                CACHE.Add(organization.Id, organization);
+                CACHE.Add(organization.Key, organization);
             }
 
             return organization;
@@ -209,14 +209,14 @@ namespace Testing.Dexter.Services {
         /// <param name="organization">target organization</param>
         /// <returns>TRUE if success; otherwise FALSE</returns>
         public bool Save(Organization organization) {
-            if (CACHE.ContainsKey(organization.Id)) {
-                CACHE[organization.Id] = organization;
+            if (CACHE.ContainsKey(organization.Key)) {
+                CACHE[organization.Key] = organization;
             }
             else {
-                CACHE.Add(organization.Id, organization);
+                CACHE.Add(organization.Key, organization);
             }
 
-            return CACHE.ContainsKey(organization.Id);
+            return CACHE.ContainsKey(organization.Key);
         }
         /// <summary>
         /// <inheritdoc/>
@@ -230,7 +230,7 @@ namespace Testing.Dexter.Services {
 
             organization.PortfolioIndex.Add(identifier);
 
-            return () => (organizationId: organization.Id, portfolioId: identifier);
+            return () => (organizationId: organization.Key, portfolioId: identifier);
         }
 
         #endregion	public methods & functions

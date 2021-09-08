@@ -61,7 +61,7 @@ namespace RazorSoft.Core.Data {
         /// </summary>
         /// <returns>Enumerated collection of TENTITY</returns>
         public IEnumerable<TEntity> All() {
-            return context.All<TEntity>();
+            return context.All();
         }
         /// <summary>
         /// <inheritdoc/>
@@ -82,7 +82,7 @@ namespace RazorSoft.Core.Data {
         /// </summary>
         /// <param name="predicate">query criteria</param>
         /// <returns></returns>
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) {
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> predicate) {
             var query = predicate.Compile();
             return context.All()
                 .Where(query);

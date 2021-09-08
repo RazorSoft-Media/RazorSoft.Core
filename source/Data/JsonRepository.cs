@@ -42,7 +42,6 @@ namespace RazorSoft.Core.Data {
         /// Access collection of all Json converters
         /// </summary>
         protected IList<JsonConverter> Converters => JsonOptions.Converters;
-
         /// <summary>
         /// 
         /// </summary>
@@ -93,6 +92,8 @@ namespace RazorSoft.Core.Data {
                     JsonOptions.Converters.Add(c);
                 }
             }
+
+            OnInitialized();
         }
         #endregion	constructors & destructors
 
@@ -101,39 +102,38 @@ namespace RazorSoft.Core.Data {
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
         /// <returns></returns>
-        public IEnumerable<TData> All<TData>() {
+        public IEnumerable All() {
             var iterator = Cache().GetEnumerator();
 
             while (iterator.MoveNext()) {
-                if (iterator.Current is TData data) {
-                    yield return data;
-                }
+                yield return iterator.Current;
             }
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        public TData Add<TData>(TData item) {
-            Cache().Add(item);
-
-            return item;
+        public object Add(object item) {
+            return Add(Cache(), item);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
+        public void Commit() {
+            Save();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Remove<TData>(TData item) {
+        public bool Remove(object item) {
             var idx = Cache().IndexOf(item);
             bool has;
 
-            if (has = idx >= 0) {
+            if (has = (idx >= 0)) {
                 Cache().RemoveAt(idx);
                 has &= Cache().IndexOf(item) == -1;
             }
@@ -152,67 +152,38 @@ namespace RazorSoft.Core.Data {
 
         #region		non-public methods & functions
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected virtual object Add(IList list, object item) {
+            list.Add(item);
+
+            return item;
+        }
+        /// <summary>
         /// Retrieves the internal records cache
         /// </summary>
         protected abstract IList Cache();
         /// <summary>
-        /// Loads data from JSON file
+        /// Occurs when the JsonRepository object is initialized
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
-        protected void Load<TData>() where TData : class, new() {
-            List<TData> data = new() { };
-
-            using (var loader = new JsonLoader(file.FullName) { JsonOptions = JsonOptions }) {
-                switch (loader.DataType) {
-                    case JsonLoader.TokenType.Undef:
-                        break;
-
-                    case JsonLoader.TokenType.Array:
-                        data.AddRange(loader.Read<List<TData>>());
-
-                        break;
-                    case JsonLoader.TokenType.Object:
-                        data.Add(loader.Read<TData>());
-
-                        break;
-                }
-            }
-
-            OnLoad(data);
-        }
+        protected abstract void OnInitialized();
         /// <summary>
         /// Occures when Json data has been loaded
         /// </summary>
-        protected abstract void OnLoad(IEnumerable data);
+        protected abstract void OnDataLoaded(IEnumerable data);
         /// <summary>
         /// 
         /// </summary>
-        protected void Commit<TData>() {
-            using (var loader = new JsonLoader(file.FullName) { JsonOptions = JsonOptions }) {
-                var data = Cache().Cast<TData>();
-
-                switch (loader.DataType) {
-                    case JsonLoader.TokenType.Undef:
-                        //  new file won't have any bytes to figure this out
-                        if (data.Count() > 1) {
-                            loader.Write(data.ToList());
-                        }
-                        else {
-                            loader.Write(data.Any() ? data.First() : default);
-                        }
-
-                        break;
-                    case JsonLoader.TokenType.Array:
-                        loader.Write(data.ToList());
-
-                        break;
-                    case JsonLoader.TokenType.Object:
-                        loader.Write(data.Any() ? data.First() : default);
-
-                        break;
-                }
-            }
-        }
+        /// <param name="loader"></param>
+        protected abstract void OnWrite(JsonLoader loader);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loader"></param>
+        protected abstract ICollection OnRead(JsonLoader loader);
         /// <summary>
         /// 
         /// </summary>
@@ -223,6 +194,26 @@ namespace RazorSoft.Core.Data {
             //    .First();
 
             //repo[idx] = data;
+        }
+        /// <summary>
+        /// Loads data from JSON file
+        /// </summary>
+        protected void Load() {
+            ArrayList data = new() { };
+
+            using (var loader = new JsonLoader(file.FullName) { JsonOptions = JsonOptions }) {
+                data.AddRange(OnRead(loader));
+            }
+
+            OnDataLoaded(data);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected void Save() {
+            using (var loader = new JsonLoader(file.FullName) { JsonOptions = JsonOptions }) {
+                OnWrite(loader);
+            }
         }
         #endregion	non-public methods & functions
 

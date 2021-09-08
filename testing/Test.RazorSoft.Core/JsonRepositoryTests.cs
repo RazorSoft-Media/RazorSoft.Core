@@ -3,7 +3,9 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,10 +27,13 @@ namespace Testing.Dexter.Data.Repository {
         private static string DATA_PATH = $@".\{DATA_DIRECTORY}";
         private const string ARRAY_FILE = "array.json";
         private const string OBJECT_FILE = "object.json";
+        private const int EXP_OBJECT_COUNT = 1;
 
         private static readonly DirectoryInfo DIRECTORY = new DirectoryInfo(SysEnviron.CurrentDirectory);
 
-        private string[] expIds = new[] { "4BD0394HAVOC", "B4BC8647LSLL" };
+        private static int EXP_ARRAY_COUNT;
+
+        private string[] expKeys = new[] { "4BD0394HAVOC", "B4BC8647LSLL" };
         private string[] expNames = new[] { "Houdini", "Huckleberry" };
         private string arrayFile;
         private string objectFile;
@@ -86,7 +91,7 @@ namespace Testing.Dexter.Data.Repository {
 
         [TestMethod]
         public void DefaultArrayJsonRepository() {
-            JsonRepository repo = new TestRepository(arrayFile);
+            JsonRepository repo = new TestRepository(Log, arrayFile);
 
             Assert.AreEqual(DATA_PATH, JsonRepository.RootPath, "root path");
             Assert.AreEqual($@"...\{DATA_DIRECTORY}\", repo.DataPath, "data path");
@@ -97,7 +102,7 @@ namespace Testing.Dexter.Data.Repository {
 
         [TestMethod]
         public void DefaultObjectJsonRepository() {
-            JsonRepository repo = new TestRepository(objectFile);
+            JsonRepository repo = new TestRepository(Log, objectFile);
 
             Assert.AreEqual(DATA_PATH, JsonRepository.RootPath, "root path");
             Assert.AreEqual($@"...\{DATA_DIRECTORY}\", repo.DataPath, "data path");
@@ -108,30 +113,99 @@ namespace Testing.Dexter.Data.Repository {
 
         [TestMethod]
         public void LoadDataItemArrayRepository() {
-            var expCount = expIds.Length;
-            TestGuidDataRepository repo = new(arrayFile);
+            var expCount = EXP_ARRAY_COUNT = expKeys.Length;
+            GuidDataClassRepository repo = new(Log, arrayFile);
 
             Assert.AreEqual(expCount, repo.Collection.Count, "items count");
 
             foreach (var item in repo.Collection) {
                 if (item is GuidDataClass guidData) {
-                    Log($"{guidData.Id} -- {guidData.Name}");
+                    Log($"{guidData.Key} -- {guidData.Name}");
                 }
             }
         }
 
         [TestMethod]
         public void LoadDataItemObjectRepository() {
-            var expCount = 1;
-            TestDataRepository repo = new(objectFile);
+            var expCount = EXP_OBJECT_COUNT;
+            DataClassRepository repo = new(Log, objectFile);
 
             Assert.AreEqual(expCount, repo.Collection.Count, "items count");
 
             foreach (var item in repo.Collection) {
                 if (item is DataClass data) {
-                    Log($"{data.Id} -- {data.Name}");
+                    Log($"{data.Key} -- {data.Name}");
                 }
             }
+        }
+
+        [TestMethod]
+        public void AddItemToArrayRepository() {
+            EXP_ARRAY_COUNT = expKeys.Length;
+            GuidDataClassRepository repo = new(Log, arrayFile);
+            EXP_ARRAY_COUNT = repo.Collection.Count;
+
+            object item = new GuidDataClass() {
+                Guid = Guid.NewGuid(),
+                Key = "DF47765AAHPI",
+                Name = "Jacob",
+                Number = 76,
+                Boolean = false
+            };
+            GuidDataClass expData = null;
+
+            if (repo.Add(item) is GuidDataClass data) {
+                //  increment expected count
+                ++EXP_ARRAY_COUNT;
+                expData = data;
+            }
+
+            //  collection count should be +1
+            Assert.AreEqual(EXP_ARRAY_COUNT, repo.Collection.Count);
+
+            repo.Commit();
+            repo.Dispose();
+
+            //  re-initialize repository
+            repo = new(Log, arrayFile);
+            GuidDataClass actData = repo.All()
+                .Select((i) => i as GuidDataClass)
+                .Where(i => i.Key == expData.Key)
+                .FirstOrDefault();
+
+            Assert.IsNotNull(actData);
+        }
+
+        [TestMethod]
+        public void AddItemToObjectRepository() {
+            DataClassRepository repo = new(Log, objectFile);
+
+            object item = new DataClass() {
+                Key = "DF47765AAHPI",
+                Name = "Jacob",
+                Number = 76,
+                Boolean = false
+            };
+            DataClass expData = null;
+
+            if (repo.Add(item) is DataClass data) {
+                expData = data;
+            }
+
+            //  collection count should be 1
+            Assert.AreEqual(EXP_OBJECT_COUNT, repo.Collection.Count);
+
+            repo.Commit();
+            repo.Dispose();
+
+            //  re-initialize repository
+            repo = new(Log, objectFile);
+            DataClass actData = repo.All()
+                .Select((i) => i as DataClass)
+                .Where(i => i.Key == expData.Key)
+                .FirstOrDefault();
+
+            Assert.IsNotNull(actData);
         }
 
         #region 	utility methods
@@ -142,24 +216,77 @@ namespace Testing.Dexter.Data.Repository {
 
 
         #region     test classes
-        private class TestDataRepository : TestRepository {
+        /// <summary>
+        /// Test ArrayData (R/W) methods
+        /// </summary>
+        private class GuidDataClassRepository : TestRepository {
 
             #region		constructors & destructors
-            public TestDataRepository(string dataPath) : base(dataPath) {
-                Load<DataClass>();
+            public GuidDataClassRepository(Action<string> logFunc, string dataPath) : base(logFunc, dataPath) {
+                Load();
             }
             #endregion	constructors & destructors
 
+
+            //  customize read
+            protected override ICollection OnRead(JsonLoader loader) {
+                ArrayList items = new(loader.Read<List<GuidDataClass>>());
+
+                Assert.IsTrue(items.Count == EXP_ARRAY_COUNT);
+
+                Log($"loaded multiple [{nameof(GuidDataClass)}] items {string.Join(", ", items.Select((GuidDataClass i) => i.Key))}");
+
+                return items;
+            }
+
+            //  customize write
+            protected override void OnWrite(JsonLoader loader) {
+                loader.Write(Cache().ToList<GuidDataClass>());
+
+                Log($"committed {Collection.Count} [{nameof(GuidDataClass)}] items to data store");
+            }
         }
-
-        private class TestGuidDataRepository : TestRepository {
+        /// <summary>
+        /// Test ObjectData (R/W) methods
+        /// </summary>
+        private class DataClassRepository : TestRepository {
 
             #region		constructors & destructors
-            public TestGuidDataRepository(string dataPath) : base(dataPath) {
-                Load<GuidDataClass>();
+            public DataClassRepository(Action<string> logFunc, string dataPath) : base(logFunc, dataPath) {
+                Load();
             }
             #endregion	constructors & destructors
 
+
+            //  customize add - only has a single object ever in the repository
+            protected override object Add(IList list, object item) {
+                return list[0] = item;
+            }
+
+            //  customize read
+            protected override ICollection OnRead(JsonLoader loader) {
+                //  expects a single object to be loaded so is loaded into internal Cache
+                ArrayList items = new() { loader.Read<DataClass>() };
+
+                Assert.IsTrue(items.Count == EXP_OBJECT_COUNT);
+
+                DataClass data = null;
+
+                if (items[0] is DataClass dataClass) {
+                    data = dataClass;
+                }
+
+                Log($"loaded single [{nameof(DataClass)}] item {data.Key}");
+
+                return items;
+            }
+
+            //  customize write
+            protected override void OnWrite(JsonLoader loader) {
+                var data = Cache().SingleOrDefault<DataClass>();
+
+                loader.Write(data);
+            }
         }
 
         private class TestRepository : JsonRepository {
@@ -170,18 +297,19 @@ namespace Testing.Dexter.Data.Repository {
 
             #region		properties
             internal ICollection Collection => cache;
+
+            protected Action<string> Log { get; set; }
             #endregion	properties
 
 
             #region		constructors & destructors
-            public TestRepository(string dataPath) : base(dataPath) {
-
+            public TestRepository(Action<string> logFunc, string dataPath) : base(dataPath) {
+                Log = logFunc;
             }
             #endregion	constructors & destructors
 
 
             #region		public methods & functions
-
             #endregion	public methods & functions
 
 
@@ -190,25 +318,36 @@ namespace Testing.Dexter.Data.Repository {
             /// <inheritdoc/>
             /// </summary>
             /// <typeparam name="TData"></typeparam>
+            /// <returns></returns>
+            protected override IList Cache() {
+                return cache;
+            }
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <typeparam name="TData"></typeparam>
             /// <param name="data"></param>
-            protected override void OnLoad(IEnumerable data) {
+            protected override void OnDataLoaded(IEnumerable data) {
                 cache.Clear();
                 cache.AddRange(data);
             }
             /// <summary>
             /// <inheritdoc/>
             /// </summary>
-            /// <typeparam name="TData"></typeparam>
-            /// <returns></returns>
-            protected override IList Cache() {
-                return cache;
+            protected override void OnInitialized() {
+                // nothing to test here (yet)
             }
-
+            protected override ICollection OnRead(JsonLoader loader) {
+                throw new NotImplementedException($"read method is not implemented by {GetType().Name}");
+            }
+            protected override void OnWrite(JsonLoader loader) {
+                throw new NotImplementedException($"write method is not implemented by {GetType().Name}");
+            }
             #endregion	non-public methods & functions
         }
 
         private class DataClass {
-            public string Id { get; set; }
+            public string Key { get; set; }
             public string Name { get; set; }
             public int Number { get; set; }
             public bool Boolean { get; set; }

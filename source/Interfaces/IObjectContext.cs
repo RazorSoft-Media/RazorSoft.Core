@@ -2,6 +2,7 @@
 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -24,30 +25,31 @@ namespace RazorSoft.Core.Data {
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
         /// <returns></returns>
-        IEnumerable<TData> All<TData>();
+        IEnumerable All();
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        TData Add<TData>(TData item);
+        object Add(object item);
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
+        void Commit();
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        bool Remove<TData>(TData item);
+        bool Remove(object item);
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IObjectContext<T> : IObjectContext where T : class, new() {
+    public interface IObjectContext<T> : IDisposable where T : class, new() {
         /// <summary>
         /// 
         /// </summary>

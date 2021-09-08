@@ -18,7 +18,7 @@ namespace Testing.Dexter.Data {
 
 
         #region		properties
-        public string Id { get; set; }
+        public string Key { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
         [JsonPropertyName("Index")]
@@ -39,11 +39,11 @@ namespace Testing.Dexter.Data {
                 return false;
             }
 
-            return other.Id == Id;
+            return other.Key == Key;
         }
 
         public override int GetHashCode() {
-            return Id.GetHashCode();
+            return Key.GetHashCode();
         }
         #endregion	public methods & functions
 

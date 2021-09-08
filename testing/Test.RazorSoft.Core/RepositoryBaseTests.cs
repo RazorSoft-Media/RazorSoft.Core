@@ -118,9 +118,9 @@ namespace Testing.Dexter.Data.Repository {
             }
 
             Assert.IsNotNull(org);
-            Assert.IsFalse(string.IsNullOrEmpty(org.Id));
+            Assert.IsFalse(string.IsNullOrEmpty(org.Key));
 
-            Log($"added org [{org.Name} - {org.Id}]");
+            Log($"added org [{org.Name} - {org.Key}]");
         }
 
         [TestMethod]
@@ -138,13 +138,13 @@ namespace Testing.Dexter.Data.Repository {
             }
 
             using (OrganizationRepository repo = new()) {
-                actOrg = repo.Find(o => o.Id == expOrg.Id)
+                actOrg = repo.Get(o => o.Key == expOrg.Key)
                     .FirstOrDefault();
             }
 
             Assert.IsNotNull(actOrg);
 
-            Log($"found org [{actOrg.Name} - {actOrg.Id}]");
+            Log($"found org [{actOrg.Name} - {actOrg.Key}]");
         }
 
         [TestMethod]
@@ -154,7 +154,7 @@ namespace Testing.Dexter.Data.Repository {
             bool result = false;
 
             using (OrganizationRepository repo = new()) {
-                org = repo.Find(o => o.Id == orgIds[2])
+                org = repo.Get(o => o.Key == orgIds[2])
                     .FirstOrDefault();
 
                 if(org is not null) {

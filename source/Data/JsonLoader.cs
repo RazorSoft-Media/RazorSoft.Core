@@ -11,7 +11,7 @@ namespace RazorSoft.Core.Data {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class JsonLoader : IDisposable {
+    public sealed class JsonLoader : ISelect, IDisposable {
         #region		fields
         private delegate void Serializer(Utf8JsonWriter writer, object? dataObject, Type type, JsonSerializerOptions options = null);
         private delegate object Deserializer(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options = null);
@@ -162,4 +162,9 @@ namespace RazorSoft.Core.Data {
         }
         #endregion  nested classes
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ISelect { }
 }
