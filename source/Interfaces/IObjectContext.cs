@@ -81,10 +81,8 @@ namespace RazorSoft.Core.Data {
         /// <returns></returns>
         bool Remove(T item);
         /// <summary>
-        /// 
+        /// Update replaces the item in the cache. If the item is not found, it is added.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         bool Update(T item);
         /// <summary>
         /// 

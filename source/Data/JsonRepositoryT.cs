@@ -3,9 +3,12 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+//
+using RazorSoft.Core.Linq;
 
 
 namespace RazorSoft.Core.Data {
@@ -24,6 +27,8 @@ namespace RazorSoft.Core.Data {
     public abstract class JsonRepository<TEntity> : JsonRepository, IObjectContext<TEntity> where TEntity : class, new() {
         #region		fields
         private readonly InternalCache cache = new();
+
+        private Selector keySelector;
         #endregion	fields
 
 
@@ -45,7 +50,9 @@ namespace RazorSoft.Core.Data {
         /// 
         /// </summary>
         /// <param name="dataFile"></param>
-        public JsonRepository(string dataFile) : base(dataFile) { }
+        public JsonRepository(string dataFile) : base(dataFile) {
+            keySelector = new();
+        }
         #endregion	constructors & destructors
 
 
@@ -87,12 +94,18 @@ namespace RazorSoft.Core.Data {
             return cache.Remove(item);
         }
         /// <summary>
-        /// 
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
         bool IObjectContext<TEntity>.Update(TEntity item) {
-            throw new NotImplementedException("Update item not implemented");
+            var key = keySelector.Key(item);
+
+            if(cache.Contains(e => keySelector.Key(e).Equals(key), out int index)) {
+                cache[index] = item;
+            }
+
+            return index != -1;
         }
         /// <summary>
         /// 
@@ -131,6 +144,24 @@ namespace RazorSoft.Core.Data {
 
 
         #region     private class
+        private class Selector {
+            private readonly Type type;
+            
+            private PropertyInfo keyProperty;
+
+            internal Func<TEntity, string> Key { get; set; }
+
+            internal Selector() {
+                type = typeof(TEntity);
+
+                var keyProperty = type.GetProperty("Key");
+
+                if(keyProperty is not null) {
+                    Key = (e) => (string)keyProperty.GetValue(e);
+                }
+            }
+        }
+
         private class InternalCache : IEnumerable<TEntity>, IList, IList<TEntity>, ICollection<TEntity>, IQueryable<TEntity> {
             #region		fields
             private readonly object syncRoot = new();
@@ -302,6 +333,21 @@ namespace RazorSoft.Core.Data {
 
 
             #region		non-public methods & functions
+            internal bool Contains(Func<TEntity, bool> predicate, out int index) {
+                index = -1;
+                int count = 0;
+
+                while (count < entities.Count) {
+                    if (predicate(entities[count])) {
+                        index = count;
+                        break;
+                    }
+
+                    ++count;
+                }
+
+                return index != -1;
+            }
 
             private IQueryable<TEntity> GetQueryable() {
                 return new EnumerableQuery<TEntity>(this).Select(x => x).AsQueryable();

@@ -167,6 +167,37 @@ namespace Testing.Dexter.Data.Repository {
             Assert.IsTrue(result);
         }
 
+        [TestMethod]
+        public void UpdateData() {
+            string key = "F99240BBHVAC";
+            bool expValue = true;
+
+            Organization organization;
+
+            using (OrganizationRepository repo = new()) {
+                organization = repo.Get(o => o.Key == key)
+                    .FirstOrDefault();
+
+                Log($" {organization.Name} Active [{organization.Active}]");
+                organization.Active = expValue;
+
+                Assert.IsTrue(repo.Update(organization), $"organization '{organization.Name}' not found");
+
+                repo.Commit();
+            }
+
+            //  reload
+            using (OrganizationRepository repo = new()) {
+                organization = repo.Get(o => o.Key == key)
+                    .FirstOrDefault();
+            }
+
+            Assert.AreEqual(expValue, organization.Active);
+
+            Log($" {organization.Name} Active [{organization.Active}]");
+        }
+
+
         #region 	utility methods
         private void Log(string entry) {
             TestContext.WriteLine($"[{TestContext.TestName}]:\t{entry}");

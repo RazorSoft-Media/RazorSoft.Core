@@ -38,6 +38,27 @@ namespace RazorSoft.Core.Linq {
             }
         }
         /// <summary>
+        /// Executes an action with an entity that matches select criteria
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="select"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> If<T>(this IEnumerable<T> source, Func<T, bool> select, Action<T> action) {
+            var iterator = source.GetEnumerator();
+
+            while (iterator.MoveNext()) {
+                T item = iterator.Current;
+
+                if (select(item)) {
+                    action(item);
+                }
+
+                yield return item;
+            }
+        }
+        /// <summary>
         /// ???
         /// NOTE: how is this different from System.Linq ???
         /// </summary>
@@ -100,15 +121,15 @@ namespace RazorSoft.Core.Linq {
         public static TOut SingleOrDefault<TOut>(this IEnumerable source) {
             var array = source?.ToArray<TOut>();
 
-            if(array == null) {
+            if (array == null) {
                 throw new ArgumentNullException("source cannot be null");
             }
 
-            if(array.Length == 0) {
+            if (array.Length == 0) {
                 return default;
             }
 
-            if(array.Length > 1) {
+            if (array.Length > 1) {
                 throw new InvalidOperationException($"source has too many elements; expects exactly 1 [{array?.Length}]");
             }
 
