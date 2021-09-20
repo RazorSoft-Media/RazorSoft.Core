@@ -9,10 +9,18 @@ using System.Collections.Generic;
 
 namespace RazorSoft.Core.Data {
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public abstract class RepositoryBase<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class, new() {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public delegate bool OnValidateAdd<TEntity>(TEntity entity);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class RepositoryBase<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class, new() {
 		#region		fields
 		private readonly IObjectContext<TEntity> context;
         #endregion	fields

@@ -21,10 +21,9 @@
     <Compile Include="..\..\..\RazorSoft.Media\source\Drawing\Vector.cs" Link=".RazorSoft.Media\Vector.cs" />
     <Compile Include="..\..\..\RazorSoft.Media\source\Drawing\Vector2D.cs" Link=".RazorSoft.Media\Vector2D.cs" />
     <Compile Include="..\..\data\.RazorSoft.Source\PointsArray.cs" Link=".RazorSoft.Source\PointsArray.cs" />
+    <Compile Include=".RazorSoft.Data\OrganizationRepository.cs" />
     <Compile Include=".RazorSoft.Data\IOrganizationAPI.cs" />
     <Compile Include=".RazorSoft.Data\Organization.cs" />
-    <Compile Include=".RazorSoft.Data\OrganizationRepository.cs" />
-    <Compile Include=".RazorSoft.Data\OrganizationService.cs" />
     <Compile Include=".RazorSoft.Data\Portfolio.cs" />
     <Compile Include=".RazorSoft.Source\TestExtensions.cs" />
   </ItemGroup>

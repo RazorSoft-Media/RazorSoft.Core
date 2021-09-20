@@ -2,42 +2,31 @@
 
 
 using System;
-using System.Linq;
-using System.Collections;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 //
 using RazorSoft.Core.Data;
-using RazorSoft.Core.Linq;
-using RazorSoft.Core.Messaging;
-using RazorSoft.Core.Extensions;
-//
-using Testing.Dexter.Services;
 
 
-namespace Testing.Dexter.Data.Repositories {
+namespace Testing.Dexter.Data {
 
     /// <summary>
     /// 
     /// </summary>
-    public sealed class OrganizationRepository : RepositoryBase<Organization> {
-        #region		fields 
-        private const string DATA_FILE = "organizations.json";
+    public class OrganizationRepository : RepositoryBase<Organization> {
+        #region		fields
 
-        private static readonly Command<IOrganizationAPI> API = CommandRouter.Default.GetRoute<IOrganizationAPI>();
         #endregion	fields
 
 
         #region		properties
-
+        internal Action<string> Logger { get; set; }
         #endregion	properties
 
 
         #region		constructors & destructors
+
         public OrganizationRepository() : base(new OrganizationContext()) {
-
         }
-
         #endregion	constructors & destructors
 
 
@@ -47,67 +36,61 @@ namespace Testing.Dexter.Data.Repositories {
 
 
         #region		non-public methods & functions
-        protected override bool OnAdd(Organization organization) {
-            if (string.IsNullOrEmpty(organization.Key)) {
-                CreateId(organization);
-            }
 
-            if (!CreateFolder(organization)) {
-                //  log org folder creation exception
-            }
-
-            return Duplicate(organization);
-        }
-
-        private bool Duplicate(Organization organiation) {
-            return !All().Any(o => organiation.Key == o.Key);
-        }
-
-
-        private static void CreateId(Organization organization) {
-            API.Execute((api) => api.CreateId(organization));
-        }
-
-        private static bool CreateFolder(Organization organization) {
-            var exists = false;
-
-            API.Execute((api) => api.CreateFolder(organization, out exists));
-
-            return exists;
-        }
         #endregion	non-public methods & functions
 
 
-        #region     private classes
-        private class OrganizationContext : JsonRepository<Organization> {
+        #region     private class
+        private class OrganizationContext : IObjectContext<Organization> {
+            private readonly Dictionary<string, Organization> keyedCache = new();
 
-            #region		properties
+            private OnValidateAdd<Organization> onValidate = (o) => true;
 
-            #endregion	properties
-
-
-            #region		constructors & destructors
-            public OrganizationContext() : base(DATA_FILE) {
-                Load();
-            }
-            #endregion	constructors & destructors
-
-
-            #region		non-public methods & functions
-            protected override void OnInitialized() {
-                //  prevent loading when base JsonRepository is intialized
+            public OnValidateAdd<Organization> ValidateAdd {
+                get => onValidate;
+                set => onValidate = value;
             }
 
-            protected override ICollection OnRead(JsonLoader loader) {
-                return loader.Read<List<Organization>>();
+            public string DataSource => "TestContext";
+
+            public Organization Add(Organization item) {
+                if(!keyedCache.TryGetValue(item.Key, out Organization organization)) {
+                    keyedCache.Add(item.Key, organization = item);
+                }
+
+                return organization;
             }
 
-            protected override void OnWrite(JsonLoader loader) {
-                loader.Write(Cache().ToList<Organization>());
+            public IEnumerable<Organization> All() {
+                return keyedCache.Values;
             }
-            #endregion	non-public methods & functions
+
+            public void Commit() {
+                //  hmmm ... we could just mock this, but implementation will be different for any data context
+            }
+
+            public bool Remove(Organization item) {
+                return keyedCache.Remove(item.Key);
+            }
+
+            public bool Update(Organization item) {
+                keyedCache[item.Key] = item;
+
+                return true;
+            }
+
+            public bool Update(IEnumerable<Organization> itemList) {
+                foreach(var item in itemList) {
+                    Update(item);
+                }
+
+                return true;
+            }
+
+            public void Dispose() {
+                keyedCache.Clear();
+            }
         }
-        #endregion  private classes
-
+        #endregion  private class
     }
 }
