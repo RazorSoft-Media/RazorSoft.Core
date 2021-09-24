@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "7JiWliXsYMHHk/I5/DIa+vUiugHLgwaoCHXj5a32f8eegrcOOoTM+7J9BFYiH2l78cxEtWHLvgSqoTjae5Xy0Q==",
+  "dgSpecHash": "sW7qvumfC8Ksgvf9vJYYU+gjBv3y8NKEbYq7iZ2gJiv7ITJxCSUsag4poIdLtVxhNbiQlnUlitvHrwel/b0s4Q==",
   "success": true,
   "projectFilePath": "C:\\LSLT Software Development\\RazorSoft.Core\\source\\RazorSoft.Core.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\LSLT Software Development\\RazorSoft.Core\\source\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

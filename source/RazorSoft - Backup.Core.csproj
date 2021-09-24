@@ -6,13 +6,13 @@
     <Company>RazorSoft Media, DBA</Company>
     <Authors>RazorSoft Media</Authors>
     <Configuration>Debug</Configuration>
-    <FileVersion>2.1.0.0</FileVersion>
+    <FileVersion>2.0.0.1</FileVersion>
     <InformationalVersion>1.0.0.0</InformationalVersion>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
     <AssemblyTitle>RazorSoft.Core</AssemblyTitle>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId />
-    <Version>2.1.0.0</Version>
+    <Version>2.0.0.1</Version>
     <PackageProjectUrl>https://github.com/RazorSoft-Media/RazorSoft.Core</PackageProjectUrl>
     <Description>Core utilities &amp; helpers:
 - Linq extensions
@@ -29,7 +29,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>bin\Debug\RazorSoft.Core.xml</DocumentationFile>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
