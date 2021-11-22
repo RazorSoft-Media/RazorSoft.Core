@@ -1,8 +1,4 @@
-//	* *************************************************************************
-//	*  © 2020      RazorSoft Media, DBA                                       *
-//	*              Lone Star Logistics & Transport, LLC.                      *
-//	*              All Rights Reserved                                        *
-//	* *************************************************************************
+// Copyright: ©2020 RazorSoft Media, DBA, Lone Star Logistics & Transport, LLC. All Rights Reserved.
 
 
 using System;
@@ -15,7 +11,7 @@ using RazorSoft.Core.Messaging;
 using RazorSoft.Core.Extensions;
 
 
-namespace UnitTest.RazorSoft.Core {
+namespace Testing.RazorSoft.Core {
 
     [TestClass]
     public class EventPublisherTests {

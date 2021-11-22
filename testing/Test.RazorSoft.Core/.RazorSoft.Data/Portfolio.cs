@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 
-namespace Testing.Dexter.Data {
+namespace Testing.Data {
 
     /// <summary>
     /// 

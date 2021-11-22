@@ -74,7 +74,7 @@ namespace RazorSoft.Core.Data {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Commit() {
+        public virtual void Commit() {
             context.Commit();
         }
         /// <summary>

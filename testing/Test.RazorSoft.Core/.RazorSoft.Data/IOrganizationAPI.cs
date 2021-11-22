@@ -2,10 +2,9 @@
 
 
 using System;
-//
-using Testing.Dexter.Data;
 
-namespace Testing.Dexter.Services {
+
+namespace Testing.Data.Services {
 
     public delegate (string organizationId, string portfolioId) PortfolioIdentifier();
     public delegate (PortfolioIdentifier identifier, string name) PortfolioInfo();

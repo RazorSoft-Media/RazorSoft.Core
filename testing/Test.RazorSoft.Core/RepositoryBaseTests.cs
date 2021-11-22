@@ -11,11 +11,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SysEnviron = System.Environment;
 //
-using RazorSoft.Core.Data;
+using Testing.Data;
+using Testing.Data.Repositories;
+//
 using RazorSoft.Core.Extensions;
 
 
-namespace Testing.Dexter.Data.Repository {
+namespace Testing.RazorSoft.Data.Repository {
 
     [TestClass]
     [ExcludeFromCodeCoverage]
