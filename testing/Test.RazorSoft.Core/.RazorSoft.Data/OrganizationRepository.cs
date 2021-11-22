@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using RazorSoft.Core.Data;
 
 
-namespace Testing.Dexter.Data {
+namespace Testing.Data.Repositories {
 
     /// <summary>
     /// 

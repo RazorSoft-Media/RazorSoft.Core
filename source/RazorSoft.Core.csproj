@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Copyright>2020, 2021</Copyright>
     <Company>RazorSoft Media, DBA</Company>
     <Authors>RazorSoft Media</Authors>
     <Configuration>Debug</Configuration>
-    <FileVersion>2.1.0.0</FileVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <InformationalVersion>1.0.0.0</InformationalVersion>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <AssemblyTitle>RazorSoft.Core</AssemblyTitle>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId />
-    <Version>2.1.0.0</Version>
+    <Version>3.0.0.0</Version>
     <PackageProjectUrl>https://github.com/RazorSoft-Media/RazorSoft.Core</PackageProjectUrl>
     <Description>Core utilities &amp; helpers:
 - Linq extensions

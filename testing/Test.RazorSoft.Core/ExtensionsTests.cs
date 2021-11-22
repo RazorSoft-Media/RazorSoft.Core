@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -16,6 +17,7 @@ namespace UnitTest.RazorSoft.Core {
     [TestClass]
     public class ExtensionsTests {
         private const string EXP_DATA_FILE = @"..\..\..\..\data\data.json";
+        private const string TARGET_FRAMEWORK = "net6.0";
 
         private static DirectoryInfo currentDirectory = new DirectoryInfo(SysEnviron.CurrentDirectory);
         private static string[] subDirs = { "radium", "test0", "test1", "test2" };
@@ -31,6 +33,12 @@ namespace UnitTest.RazorSoft.Core {
 
         [ClassInitialize]
         public static void InitializeTestHarness(TestContext context) {
+            var targetFrameworkAttribute = Assembly.GetExecutingAssembly()
+                .GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false)
+                .SingleOrDefault();
+
+            context.WriteLine($"Target Framework: {targetFrameworkAttribute}");
+
             Assert.IsTrue(File.Exists(EXP_DATA_FILE));
         }
 
@@ -92,7 +100,7 @@ namespace UnitTest.RazorSoft.Core {
 
             FileInfo fInfo;
 
-            using(var f = File.Create(filePath)) {
+            using (var f = File.Create(filePath)) {
                 fInfo = new FileInfo(filePath);
             }
 
@@ -109,7 +117,7 @@ namespace UnitTest.RazorSoft.Core {
             Debug.WriteLine($"Abbreviated path (Depth=1) [{actLvl1AbbrPath}]");
 
             //  abbreviated depth: 3
-            var expLvl2AbbrPath = @"...\Debug\net5.0\radium\test.txt";
+            var expLvl2AbbrPath = $@"...\Debug\{TARGET_FRAMEWORK}\radium\test.txt";
             var actLvl2AbbrPath = fInfo.AbbreviatePath(3);
 
             Assert.AreEqual(expLvl2AbbrPath, actLvl2AbbrPath);

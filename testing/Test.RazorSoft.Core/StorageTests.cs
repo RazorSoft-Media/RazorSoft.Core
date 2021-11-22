@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RazorSoft.Core.IO;
 
 
-namespace UnitTest.RazorSoft.Core {
+namespace Testing.RazorSoft.Core {
 
     [TestClass]
     [ExcludeFromCodeCoverage]
